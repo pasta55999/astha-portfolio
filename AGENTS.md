@@ -13,5 +13,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Dev: `npm run dev`. Verify: `npm run lint && npx tsc --noEmit && npm run build`.
 - All content is in `src/data/*.ts`; components should not hard-code copy. Never invent metrics, awards or links — leave a `TODO` and hide the item instead.
 - Next 16 cache components: avoid `new Date()`/`Math.random()` in server components; `params` must be awaited inside a `<Suspense>` boundary (see `src/app/projects/[slug]/page.tsx`).
+- Eyebrow text starting with `//` must be wrapped in a string expression (`{"// 01. About"}`) or ESLint flags it as a JSX comment.
+- Section wrappers are `position: relative`, so compute scroll positions with `getBoundingClientRect().top + scrollY`, not `offsetTop`.
 - `lucide-react` v1 has no brand icons; GitHub/LinkedIn live in `src/components/BrandIcons.tsx`.
 - Reduced motion: `MotionConfig reducedMotion="user"` in `src/components/Providers.tsx` — don't gate `initial` props on `useReducedMotion()` (causes hydration mismatches).

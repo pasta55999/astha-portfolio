@@ -2,7 +2,7 @@
 
 Personal portfolio for Astha Chauhan, Generative AI Engineer, Dubai. Next.js 16 (App Router, cache components), TypeScript, Tailwind v4, Framer Motion, Lucide.
 
-Visual language follows the reference portfolio (deep violet-black , violet/indigo gradient accents, glass cards, Sora + Inter + Caveat). Background videos in the reference are replaced here with CSS nebula glows and a canvas starfield.
+Visual language follows the reference portfolio (deep violet-black `#05010f`, violet/indigo gradient accents, glass cards, Sora + Inter + Caveat). Background videos in the reference are replaced here with CSS nebula glows and a canvas starfield.
 
 ```bash
 npm install
@@ -40,6 +40,6 @@ src/components          Hero + SystemCanvas, ProjectShowcase, ProjectVisual (per
 src/data                all content
 ```
 
-Design tokens are CSS variables in . Display type is Sora; body is Inter; handwritten accents are Caveat; mono is Geist Mono.
+Design tokens are CSS variables in `src/app/globals.css`. Display type is Sora; body is Inter; handwritten accents are Caveat; mono is Geist Mono.
 
-Reduced motion is honoured via CSS (, keyframes) and ; the starfield renders a static frame under reduced motion.
+Reduced motion is honoured via CSS (`.reveal`, keyframes) and `MotionConfig`; the starfield renders a static frame under reduced motion.
