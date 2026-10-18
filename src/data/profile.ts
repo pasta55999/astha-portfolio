@@ -19,14 +19,14 @@ export const profile = {
   mindset: ["Build", "Validate", "Learn", "Repeat"],
   /** Status indicator next to the social icons. Set to null to hide. */
   status: "Open to opportunities" as string | null,
-  siteUrl: "https://astha.dev", // TODO: replace with the deployed URL
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://pasta55999.github.io/astha-portfolio",
   github: { handle: "pasta55999", url: "https://github.com/pasta55999" },
   /** TODO: supply real values. Empty strings are hidden in the UI. */
   email: "asthachauhan81@gmail.com",
-  linkedin: "",
+  linkedin: "https://www.linkedin.com/in/astha-chauhan-7a75211b7/",
   twitter: "",
   /** Put a file at /public/resume.pdf and set this to "/resume.pdf". */
-  resume: "/resume.pdf",
+  resume: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/resume.pdf`,
   /** Put a portrait at /public/portrait.jpg and set this to "/portrait.jpg". */
   portrait: "",
 

@@ -4,6 +4,10 @@ Personal portfolio for Astha Chauhan, Generative AI Engineer, Dubai. Next.js 16 
 
 Visual language follows the reference portfolio (deep violet-black `#05010f`, violet/indigo gradient accents, glass cards, Sora + Inter + Caveat). Background videos in the reference are replaced here with CSS nebula glows and a canvas starfield.
 
+## Deploying (GitHub Pages)
+
+Pushing to `main` runs `.github/workflows/pages.yml`, which builds a static export (`output: "export"`) with `NEXT_PUBLIC_BASE_PATH=/<repo>` and publishes it to `https://pasta55999.github.io/<repo>/`. Leave `NEXT_PUBLIC_BASE_PATH` unset for local dev or a custom domain (then also set `NEXT_PUBLIC_SITE_URL`).
+
 ```bash
 npm install
 npm run dev      # http://localhost:3000
