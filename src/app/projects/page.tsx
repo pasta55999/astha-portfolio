@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
-import { projects, accentVar } from "@/data/projects";
+import { ArrowRight, ArrowUpRight, Globe } from "lucide-react";
+import { projects } from "@/data/projects";
 import { ProjectVisual } from "@/components/ProjectVisual";
-import { Reveal, StatusPill, Tag } from "@/components/ui";
+import { Reveal, Eyebrow, Heading, GradientText, StatusPill, SectionBackdrop } from "@/components/ui";
+import { GithubIcon } from "@/components/BrandIcons";
 
 export const metadata: Metadata = {
   title: "Projects",
@@ -12,47 +13,65 @@ export const metadata: Metadata = {
 
 export default function ProjectsPage() {
   return (
-    <div className="mx-auto max-w-[1400px] px-5 pb-24 pt-32 md:px-10 md:pt-40">
-      <Reveal>
-        <p className="eyebrow text-lime">Index</p>
-        <h1 className="mt-4 font-display text-5xl md:text-7xl">
-          All projects, <span className="italic text-paper-dim">{projects.length} and counting.</span>
-        </h1>
-        <p className="mt-6 max-w-2xl text-paper-dim leading-relaxed md:text-lg">
-          Every entry links to its repository where one is public and states exactly what is built versus planned. Add a project in <code className="font-mono text-sm text-paper">src/data/projects.ts</code> and it appears here automatically.
-        </p>
-      </Reveal>
+    <div className="relative overflow-hidden">
+      <SectionBackdrop variant="a" fadeTop={false} />
+      <div className="relative z-10 mx-auto max-w-7xl px-5 pb-24 pt-32 sm:px-8 md:pt-40">
+        <Reveal className="text-center">
+          <Eyebrow>{"// Index"}</Eyebrow>
+          <Heading center className="mx-auto mt-4 max-w-3xl">
+            All projects, <GradientText>{projects.length} and counting.</GradientText>
+          </Heading>
+          <p className="mx-auto mt-4 max-w-2xl text-base text-white/55 sm:text-lg">
+            Every entry links to its repository where one is public and states exactly what is built versus planned.
+          </p>
+        </Reveal>
 
-      <ul className="mt-16 grid gap-px bg-line md:grid-cols-2">
-        {projects.map((p, i) => (
-          <Reveal as="li" key={p.slug} delay={(i % 2) * 0.06} className="bg-ink">
-            <Link href={`/projects/${p.slug}`} className="group flex h-full flex-col p-6 md:p-8">
-              <ProjectVisual visual={p.visual} accent={p.accent} className="aspect-[16/10] transition-transform duration-700 group-hover:-translate-y-1" />
-              <div className="mt-6 flex items-center gap-3">
-                <span className="font-mono text-xs" style={{ color: accentVar[p.accent] }}>
-                  {p.number}
+        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {projects.map((p, i) => (
+            <Reveal as="article" key={p.slug} delay={(i % 3) * 70} className="card group relative flex h-full flex-col overflow-hidden rounded-3xl hover:-translate-y-1">
+              <Link href={`/projects/${p.slug}`} className="relative block aspect-[16/10] overflow-hidden" aria-label={`${p.name} case study`}>
+                <ProjectVisual visual={p.visual} accent={p.accent} className="h-full w-full transition-transform duration-700 ease-out group-hover:scale-[1.05]" />
+                <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0620] via-transparent to-transparent opacity-80" />
+                <span className="glass absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full text-white/0 transition-all duration-300 group-hover:text-white">
+                  <ArrowUpRight className="h-4 w-4" />
                 </span>
-                <StatusPill status={p.status} accent={p.accent} />
-                <span className="ml-auto font-mono text-[0.62rem] text-muted">{p.year}</span>
+                <span className="absolute bottom-3 left-4 flex items-center gap-2">
+                  <StatusPill status={p.status} />
+                  <span className="font-mono text-[11px] text-white/50">{p.year}</span>
+                </span>
+              </Link>
+              <div className="flex flex-1 flex-col p-6">
+                <div className="flex flex-wrap gap-2">
+                  {p.category.map((c) => (
+                    <span key={c} className="tag">
+                      {c}
+                    </span>
+                  ))}
+                </div>
+                <h2 className="font-display mt-4 text-[22px] font-bold tracking-tight text-white">{p.name}</h2>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-white/60">{p.tagline}</p>
+                <div className="mt-5 flex items-center justify-between">
+                  <Link href={`/projects/${p.slug}`} className="group/link inline-flex items-center gap-2 text-[15px] font-semibold text-violet-400 transition-colors hover:text-violet-200">
+                    View Project <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/link:translate-x-1" />
+                  </Link>
+                  <div className="flex gap-2">
+                    {p.links.demo && (
+                      <a href={p.links.demo} target="_blank" rel="noreferrer" aria-label={`${p.name} live demo`} className="flex h-11 w-11 items-center justify-center rounded-full border border-violet-400/40 text-violet-200 transition-all duration-300 hover:border-violet-300 hover:bg-violet-500/20 hover:text-white">
+                        <Globe className="h-4 w-4" />
+                      </a>
+                    )}
+                    {p.links.repo && (
+                      <a href={p.links.repo} target="_blank" rel="noreferrer" aria-label={`${p.name} on GitHub`} className="flex h-11 w-11 items-center justify-center rounded-full border border-violet-400/40 text-violet-200 transition-all duration-300 hover:border-violet-300 hover:bg-violet-500/20 hover:text-white">
+                        <GithubIcon className="h-4 w-4" />
+                      </a>
+                    )}
+                  </div>
+                </div>
               </div>
-              <h2 className="mt-4 font-display text-4xl">
-                <span className="link-ul">{p.name}</span>
-              </h2>
-              <p className="mt-3 text-paper-dim leading-relaxed">{p.tagline}</p>
-              <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1">
-                {p.category.map((c) => (
-                  <Tag key={c} accent={p.accent}>
-                    {c}
-                  </Tag>
-                ))}
-              </div>
-              <span className="mt-auto inline-flex items-center gap-1 pt-6 font-mono text-[0.65rem] uppercase tracking-[0.16em] text-muted group-hover:text-paper">
-                Case study <ArrowUpRight className="h-3.5 w-3.5" />
-              </span>
-            </Link>
-          </Reveal>
-        ))}
-      </ul>
+            </Reveal>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

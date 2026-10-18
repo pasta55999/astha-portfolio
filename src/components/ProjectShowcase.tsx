@@ -1,233 +1,175 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
-import { ArrowUpRight, Play, Globe } from "lucide-react";
-import { GithubIcon } from "@/components/BrandIcons";
-import { featuredProjects, moreProjects, experiments, accentVar, type Project } from "@/data/projects";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowRight, ArrowUpRight, Bot, FlaskConical, Globe, LayoutGrid, Mic, BarChart3, Search, Star } from "lucide-react";
+import { projects, experiments, type Project } from "@/data/projects";
 import { ProjectVisual } from "@/components/ProjectVisual";
-import { Reveal, SectionHeader, StatusPill, Tag, Button } from "@/components/ui";
+import { Reveal, Eyebrow, Heading, GradientText, StatusPill, SectionBackdrop } from "@/components/ui";
+import { GithubIcon } from "@/components/BrandIcons";
+
+const filters = [
+  { label: "All Projects", icon: LayoutGrid, match: () => true },
+  { label: "Agentic AI", icon: Bot, match: (p: Project) => p.category.some((c) => /Agent|RAG/i.test(c)) },
+  { label: "Voice & Browser", icon: Mic, match: (p: Project) => p.category.some((c) => /Voice|Browser|Contextual/i.test(c)) },
+  { label: "Search & Retrieval", icon: Search, match: (p: Project) => p.category.some((c) => /Search|Retrieval|Multimodal|RAG/i.test(c)) },
+  { label: "Data & Analysis", icon: BarChart3, match: (p: Project) => p.category.some((c) => /Climate|Risk|Analytics|Reconciliation|Decision|Monitoring|Brand|Evaluation/i.test(c)) },
+];
 
 export function ProjectShowcase() {
-  return (
-    <section id="work" className="scroll-mt-24 border-t border-line">
-      <div className="mx-auto max-w-[1400px] px-5 py-24 md:px-10 md:py-32">
-        <SectionHeader
-          index="01"
-          label="Selected work"
-          title={
-            <>
-              Products, not demos — <span className="italic text-paper-dim">with the honest status attached.</span>
-            </>
-          }
-          intro="Four featured builds and three more below, each with a full case study: the problem, the thinking, what I actually built, and what's still missing."
-        />
+  const [active, setActive] = useState(0);
+  const list = projects.filter(filters[active].match);
 
-        <div className="mt-20 flex flex-col gap-28 md:gap-40">
-          {featuredProjects.map((p, i) => (
-            <FeatureRow key={p.slug} project={p} index={i} />
+  return (
+    <div className="relative">
+      <SectionBackdrop variant="a" />
+      <section id="projects" className="relative z-10 scroll-mt-20">
+        <div className="mx-auto max-w-7xl px-5 pb-24 pt-10 sm:px-8">
+          <Reveal className="relative">
+            <Eyebrow>{"// 02. Projects"}</Eyebrow>
+            <Heading size="md" center className="mx-auto mt-4 max-w-4xl">
+              Projects that solve
+              <br className="hidden sm:block" /> <GradientText>real problems.</GradientText>
+            </Heading>
+            <p className="mt-3 text-center text-base text-white/55 sm:text-lg">Working prototypes and concepts — each with an honest status and a full case study.</p>
+            <span className="absolute -top-2 right-0 hidden rotate-[8deg] select-none text-right font-hand text-2xl italic leading-tight text-violet-400/80 drop-shadow-[0_0_12px_rgba(139,92,246,0.8)] xl:block">
+              Ideas
+              <br />
+              Code
+              <br />
+              Impact
+            </span>
+          </Reveal>
+
+          <Reveal delay={80} className="mt-9 flex flex-wrap items-center justify-center gap-3" role="tablist" aria-label="Project filters">
+            {filters.map((f, i) => {
+              const Icon = f.icon;
+              const on = i === active;
+              return (
+                <button key={f.label} type="button" role="tab" aria-selected={on} onClick={() => setActive(i)} className={`pill px-6 py-3 text-sm ${on ? "pill-active btn-primary-glow" : ""}`}>
+                  <Icon className="h-4 w-4" />
+                  {f.label}
+                </button>
+              );
+            })}
+          </Reveal>
+
+          <motion.div layout className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+            <AnimatePresence mode="popLayout">
+              {list.map((p, i) => (
+                <motion.div key={p.slug} layout initial={{ opacity: 0, y: 24, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, scale: 0.96 }} transition={{ duration: 0.45, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}>
+                  <ProjectCard project={p} featured={p.slug === "guidr"} />
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
+
+          <Experiments />
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function ProjectCard({ project: p, featured }: { project: Project; featured?: boolean }) {
+  const href = `/projects/${p.slug}`;
+  return (
+    <article className={`card group relative flex h-full flex-col overflow-hidden rounded-3xl hover:-translate-y-1 ${featured ? "card-featured" : ""}`}>
+      {featured && (
+        <span className="glass absolute left-4 top-4 z-10 inline-flex items-center gap-1.5 rounded-full border-violet-300/40 px-3.5 py-1.5 text-xs font-semibold text-white">
+          <Star className="h-3.5 w-3.5 fill-amber-300 text-amber-300" /> Featured
+        </span>
+      )}
+      <Link href={href} className="relative block aspect-[16/10] overflow-hidden" aria-label={`${p.name} case study`}>
+        <ProjectVisual visual={p.visual} accent={p.accent} className="h-full w-full transition-transform duration-700 ease-out group-hover:scale-[1.05]" />
+        <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0620] via-transparent to-transparent opacity-80" />
+        <span className="glass absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full text-white/0 transition-all duration-300 group-hover:text-white">
+          <ArrowUpRight className="h-4 w-4" />
+        </span>
+        <span className="absolute bottom-3 left-4">
+          <StatusPill status={p.status} />
+        </span>
+      </Link>
+      <div className="flex flex-1 flex-col p-6">
+        <div className="flex flex-wrap gap-2">
+          {p.category.map((c) => (
+            <span key={c} className="tag">
+              {c}
+            </span>
           ))}
         </div>
-
-        <MoreBuilds />
-        <Experiments />
-      </div>
-    </section>
-  );
-}
-
-function Links({ project, light }: { project: Project; light?: boolean }) {
-  const cls = `inline-flex items-center gap-1.5 font-mono text-[0.68rem] uppercase tracking-[0.16em] ${light ? "text-paper-dim hover:text-paper" : "text-muted hover:text-paper"} transition-colors`;
-  const { repo, demo, video } = project.links;
-  return (
-    <div className="flex flex-wrap gap-5">
-      {repo && (
-        <a href={repo} target="_blank" rel="noreferrer" className={cls}>
-          <GithubIcon className="h-3.5 w-3.5" /> Repository
-        </a>
-      )}
-      {demo && (
-        <a href={demo} target="_blank" rel="noreferrer" className={cls}>
-          <Globe className="h-3.5 w-3.5" /> Live demo
-        </a>
-      )}
-      {video && (
-        <a href={video} target="_blank" rel="noreferrer" className={cls}>
-          <Play className="h-3.5 w-3.5" /> Demo video
-        </a>
-      )}
-    </div>
-  );
-}
-
-/** Four distinct layouts, chosen by index so each featured project reads differently. */
-function FeatureRow({ project: p, index }: { project: Project; index: number }) {
-  const accent = accentVar[p.accent];
-  const layout = index % 4;
-
-  const Header = (
-    <div>
-      <div className="flex items-center gap-3">
-        <span className="font-mono text-xs" style={{ color: accent }}>
-          {p.number}
-        </span>
-        <StatusPill status={p.status} accent={p.accent} />
-      </div>
-      <h3 className="mt-5 font-display text-5xl md:text-7xl">
-        <Link href={`/projects/${p.slug}`} className="link-ul">
-          {p.name}
-        </Link>
-      </h3>
-      <p className="mt-4 text-xl leading-snug text-paper md:text-2xl text-balance">{p.tagline}</p>
-      <div className="mt-5 flex flex-wrap gap-x-4 gap-y-1">
-        {p.category.map((c) => (
-          <Tag key={c} accent={p.accent}>
-            {c}
-          </Tag>
-        ))}
-      </div>
-    </div>
-  );
-
-  const Body = (
-    <div>
-      <p className="text-paper-dim leading-relaxed md:text-lg">{p.summary}</p>
-      <ul className="mt-6 flex flex-wrap gap-2">
-        {p.stack.slice(0, 6).map((s) => (
-          <li key={s} className="border border-line px-2 py-1 font-mono text-[0.62rem] text-paper-dim">
-            {s}
-          </li>
-        ))}
-      </ul>
-      <div className="mt-8 flex flex-wrap items-center gap-6">
-        <Button href={`/projects/${p.slug}`} variant="ghost">
-          Read the case study
-        </Button>
-        <Links project={p} />
-      </div>
-    </div>
-  );
-
-  const Visual = (
-    <Link href={`/projects/${p.slug}`} className="group block" aria-label={`${p.name} case study`}>
-      <ProjectVisual visual={p.visual} accent={p.accent} className={`aspect-[4/3] transition-transform duration-700 ease-[cubic-bezier(.16,1,.3,1)] group-hover:-translate-y-1 ${index % 4 === 0 ? "md:aspect-[16/7]" : "md:aspect-[16/11]"}`} />
-    </Link>
-  );
-
-  if (layout === 0)
-    // Full-bleed: visual spans wide, text below in two columns
-    return (
-      <Reveal as="div" className="grid gap-8">
-        {Visual}
-        <div className="grid gap-8 md:grid-cols-12">
-          <div className="md:col-span-6">{Header}</div>
-          <div className="md:col-span-6 md:pt-14">{Body}</div>
-        </div>
-      </Reveal>
-    );
-
-  if (layout === 1)
-    // Text left, visual right, offset
-    return (
-      <Reveal as="div" className="grid items-start gap-8 md:grid-cols-12">
-        <div className="md:col-span-5 md:sticky md:top-28">
-          {Header}
-          <div className="mt-10">{Body}</div>
-        </div>
-        <div className="md:col-span-7 md:pl-10 md:pt-24">{Visual}</div>
-      </Reveal>
-    );
-
-  if (layout === 2)
-    // Visual left, accent block, text right
-    return (
-      <Reveal as="div" className="grid items-start gap-8 md:grid-cols-12">
-        <div className="md:col-span-7">
-          <div className="relative">
-            <div className="absolute -left-3 -top-3 h-full w-full border md:-left-5 md:-top-5" style={{ borderColor: `color-mix(in srgb, ${accent} 40%, transparent)` }} aria-hidden />
-            {Visual}
+        <h3 className="font-display mt-4 text-[22px] font-bold tracking-tight text-white">
+          <Link href={href} className="transition-colors group-hover:text-violet-200">
+            {p.name}
+          </Link>
+        </h3>
+        <p className="mt-2 flex-1 text-sm leading-relaxed text-white/60">{p.tagline}</p>
+        <ul className="mt-4 flex flex-wrap gap-x-3 gap-y-1 font-mono text-[11px] text-white/45">
+          {p.stack.slice(0, 4).map((s) => (
+            <li key={s}>{s}</li>
+          ))}
+        </ul>
+        <div className="mt-5 flex items-center justify-between">
+          <Link href={href} className="group/link inline-flex items-center gap-2 text-[15px] font-semibold text-violet-400 transition-colors hover:text-violet-200">
+            View Project <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/link:translate-x-1" />
+          </Link>
+          <div className="flex items-center gap-2">
+            {p.links.demo && (
+              <a href={p.links.demo} target="_blank" rel="noreferrer" aria-label={`${p.name} live demo`} className="flex h-11 w-11 items-center justify-center rounded-full border border-violet-400/40 text-violet-200 transition-all duration-300 hover:border-violet-300 hover:bg-violet-500/20 hover:text-white">
+                <Globe className="h-4 w-4" />
+              </a>
+            )}
+            {p.links.repo && (
+              <a href={p.links.repo} target="_blank" rel="noreferrer" aria-label={`${p.name} on GitHub`} className="flex h-11 w-11 items-center justify-center rounded-full border border-violet-400/40 text-violet-200 transition-all duration-300 hover:border-violet-300 hover:bg-violet-500/20 hover:text-white">
+                <GithubIcon className="h-4 w-4" />
+              </a>
+            )}
           </div>
         </div>
-        <div className="md:col-span-5 md:pl-6 md:pt-10">
-          {Header}
-          <div className="mt-10">{Body}</div>
-        </div>
-      </Reveal>
-    );
-
-  // layout 3: header full width, then visual + body side by side
-  return (
-    <Reveal as="div" className="grid gap-10">
-      <div className="max-w-3xl">{Header}</div>
-      <div className="grid items-start gap-8 md:grid-cols-12">
-        <div className="md:col-span-7">{Visual}</div>
-        <div className="md:col-span-5 md:pl-6">{Body}</div>
       </div>
-    </Reveal>
-  );
-}
-
-function MoreBuilds() {
-  return (
-    <div className="mt-32 md:mt-44">
-      <Reveal className="flex flex-wrap items-end justify-between gap-6 border-b border-line pb-6">
-        <div>
-          <p className="eyebrow">More builds</p>
-          <h3 className="mt-3 font-display text-4xl md:text-5xl">Deeper, quieter engineering.</h3>
-        </div>
-        <Link href="/projects" className="link-ul inline-flex items-center gap-1 font-mono text-xs uppercase tracking-[0.16em] text-paper-dim hover:text-paper">
-          All projects <ArrowUpRight className="h-3.5 w-3.5" />
-        </Link>
-      </Reveal>
-      <ul className="divide-y divide-line">
-        {moreProjects.map((p, i) => (
-          <Reveal as="li" key={p.slug} delay={i * 0.06}>
-            <Link href={`/projects/${p.slug}`} className="group grid gap-6 py-10 md:grid-cols-12 md:items-center">
-              <div className="md:col-span-1 font-mono text-xs" style={{ color: accentVar[p.accent] }}>
-                {p.number}
-              </div>
-              <div className="md:col-span-4">
-                <h4 className="font-display text-3xl md:text-4xl">
-                  <span className="link-ul">{p.name}</span>
-                </h4>
-                <div className="mt-2 flex flex-wrap items-center gap-3">
-                  <StatusPill status={p.status} accent={p.accent} />
-                  <span className="font-mono text-[0.62rem] uppercase tracking-[0.16em] text-muted">{p.category.join(" · ")}</span>
-                </div>
-              </div>
-              <p className="md:col-span-4 text-paper-dim leading-relaxed">{p.tagline}</p>
-              <div className="md:col-span-3 md:justify-self-end">
-                <ProjectVisual visual={p.visual} accent={p.accent} compact className="h-32 w-full md:w-56 transition-transform duration-700 group-hover:-translate-y-1" />
-              </div>
-            </Link>
-          </Reveal>
-        ))}
-      </ul>
-    </div>
+    </article>
   );
 }
 
 function Experiments() {
   return (
-    <div className="mt-24 md:mt-32">
-      <Reveal className="grid gap-6 md:grid-cols-12">
-        <div className="md:col-span-4">
-          <p className="eyebrow">Experiments</p>
-          <h3 className="mt-3 font-display text-4xl md:text-5xl">
-            Not products. <span className="italic text-paper-dim">Yet.</span>
-          </h3>
-          <p className="mt-4 text-paper-dim leading-relaxed">Directions I&apos;m actively poking at. Labelled honestly: no users, no benchmarks, no claims.</p>
+    <Reveal className="relative mt-14">
+      <span className="absolute -left-2 -top-10 hidden rotate-[-10deg] select-none font-hand text-2xl italic leading-tight text-violet-400/80 drop-shadow-[0_0_12px_rgba(139,92,246,0.8)] xl:block">
+        Build
+        <br />
+        Solve
+        <br />
+        Grow
+      </span>
+      <div className="glass rounded-3xl p-6 sm:p-8">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <span className="inline-flex items-center gap-2 rounded-full border border-violet-400/30 bg-violet-500/10 px-3.5 py-1 text-[13px] font-medium text-violet-200">
+              <FlaskConical className="h-3.5 w-3.5" /> Experiments
+            </span>
+            <h3 className="font-display mt-3 text-2xl font-bold text-white sm:text-3xl">
+              Not products. <GradientText>Yet.</GradientText>
+            </h3>
+            <p className="mt-2 max-w-xl text-sm text-white/55">Directions I&apos;m actively poking at — labelled honestly: no users, no benchmarks, no claims.</p>
+          </div>
+          <Link href="/projects" className="group inline-flex items-center gap-2 text-sm font-semibold text-violet-300 hover:text-white">
+            Browse all projects <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </Link>
         </div>
-        <ul className="md:col-span-8 grid gap-px bg-line sm:grid-cols-2">
+        <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {experiments.map((e) => (
-            <li key={e.title} className="bg-ink p-6">
+            <li key={e.title} className="group rounded-2xl border border-white/[0.07] bg-white/[0.04] p-4 transition-all duration-300 hover:border-violet-400/45 hover:bg-violet-500/10">
               <div className="flex items-center justify-between">
-                <span className="eyebrow">{e.area}</span>
-                <span className="font-mono text-[0.6rem] uppercase tracking-[0.16em] text-lime">{e.status}</span>
+                <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/45">{e.area}</span>
+                <span className="rounded-full bg-violet-500/15 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-violet-300">{e.status}</span>
               </div>
-              <h4 className="mt-3 font-display text-2xl">{e.title}</h4>
-              <p className="mt-2 text-sm text-paper-dim leading-relaxed">{e.note}</p>
+              <p className="mt-2 text-[15px] font-semibold text-white">{e.title}</p>
+              <p className="mt-1 text-xs leading-relaxed text-white/55">{e.note}</p>
             </li>
           ))}
         </ul>
-      </Reveal>
-    </div>
+      </div>
+    </Reveal>
   );
 }

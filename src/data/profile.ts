@@ -8,20 +8,19 @@ export const profile = {
   firstName: "Astha",
   role: "Generative AI Engineer",
   location: "Dubai, UAE",
-  eyebrow: "Generative AI Engineer · Dubai, UAE",
-  headline: ["Curious by nature.", "Built to make things happen."],
+  timezone: "Asia/Dubai",
+  timezoneLabel: "GST",
+  /** Typed character by character in the hero. */
+  typed: "// HELLO, I'M",
+  headline: ["I build intelligent", "products for", "what's next."],
   intro:
-    "I'm Astha — a GenAI engineer who enjoys turning ambitious ideas into working products, exploring what's next, and getting from “what if?” to “what works.”",
-  /** Shown in the hero. Keep it accurate; set to null to hide. */
-  currentFocus: {
-    label: "Currently",
-    text: "Building voice-first and agentic prototypes · open to conversations",
-  } as { label: string; text: string } | null,
+    "Hey, I'm Astha — a Generative AI Engineer who enjoys building intelligent products, experimenting with emerging technologies, and turning ideas into working software.",
+  /** Floating card in the hero. */
+  mindset: ["Build", "Validate", "Learn", "Repeat"],
+  /** Status indicator next to the social icons. Set to null to hide. */
+  status: "Open to opportunities" as string | null,
   siteUrl: "https://astha.dev", // TODO: replace with the deployed URL
-  github: {
-    handle: "pasta55999",
-    url: "https://github.com/pasta55999",
-  },
+  github: { handle: "pasta55999", url: "https://github.com/pasta55999" },
   /** TODO: supply real values. Empty strings are hidden in the UI. */
   email: "",
   linkedin: "",
@@ -30,18 +29,43 @@ export const profile = {
   resume: "",
   /** Put a portrait at /public/portrait.jpg and set this to "/portrait.jpg". */
   portrait: "",
-  about: [
-    "I'm a computer science engineer working in generative AI, with a particular interest in what happens when new technology meets a real-world problem.",
-    "Roughly two years in startups has made me curious about more than the engineering. I like understanding why a product needs to exist, who it's for, how it should behave, and what it actually takes to put it in someone's hands. Most of what I build starts as a question about a specific person's day — a finance assistant learning a new tool, an investor reading a seller's numbers — and the model is usually the easy part.",
-    "Outside of work you'll find me at hackathons, somewhere in the Dubai startup ecosystem, or deep in a rabbit hole about something I've never built before.",
+
+  about: {
+    heading: ["More than", "just an", "engineer."],
+    paragraphs: [
+      "I'm a Computer Science Engineer working in Generative AI, with about two years of startup experience and a particular interest in what happens when new technology meets a real-world problem.",
+      "Working in startups made me curious about more than the engineering: why a product needs to exist, who it's for, how it should behave, and what it takes to get it into people's hands. I grew up in Dubai, and most of what I build starts with a specific person here — a finance assistant learning a new tool, an investor reading a seller's numbers.",
+      "Outside of work you'll find me at hackathons, exploring new technologies, building prototypes, or meeting people in the startup ecosystem.",
+    ],
+    facts: [
+      { icon: "cpu", title: "Generative AI Engineer", sub: "~2 years in a startup environment" },
+      { icon: "map", title: "Dubai, UAE", sub: "Based in · grew up here" },
+      { icon: "graduation", title: "Computer Science Engineer", sub: "Engineering degree · GenAI focus" }, // TODO: add university name to `sub` once confirmed
+    ],
+    quote: "Curious by nature. Built to make things happen.",
+    enjoy: [
+      { icon: "brain", label: "Generative AI & LLMs" },
+      { icon: "bot", label: "Agentic systems & NLP" },
+      { icon: "mic", label: "Voice-first interfaces" },
+      { icon: "flask", label: "Hackathons & rapid prototyping" },
+      { icon: "rocket", label: "Startups & product thinking" },
+      { icon: "compass", label: "Emerging tech rabbit holes" },
+    ],
+  },
+
+  /** Verified counts — update as the data files change. */
+  stats: [
+    { value: "7", label: "Projects built" },
+    { value: "3", label: "Hackathon builds" },
+    { value: "~2 yrs", label: "GenAI in startups" },
+    { value: "Always", label: "Curious" },
   ],
+
   exploring: [
-    { topic: "Voice-first interfaces for code-switched Arabic/English", note: "Started with Guidr; still the most interesting UX problem I've touched." },
-    { topic: "Evaluation loops for LLM systems", note: "Gold sets, calibrated thresholds and regression gates instead of vibes." },
-    { topic: "Agents that can't lie about state", note: "Deterministic code owns truth; the model owns language." },
-    { topic: "Climate & financial risk modelling", note: "How physical hazard becomes a number on a balance sheet." },
-    { topic: "Quantitative finance", note: "Reading, prototyping, nothing shipped yet." },
-    { topic: "Quantum computing & wearable AI", note: "Early curiosity — on the experiments list." },
+    { topic: "Quantitative finance", note: "Backtesting simple signals on public data to learn the vocabulary before building anything." },
+    { topic: "Quantum computing", note: "Working through the basics — no project yet, just curiosity." },
+    { topic: "Wearable AI", note: "What Guidr's talk-you-through-it loop looks like off the screen." },
+    { topic: "Evaluation for agents", note: "Generalising the support-agent eval loop into something reusable." },
   ],
 };
 

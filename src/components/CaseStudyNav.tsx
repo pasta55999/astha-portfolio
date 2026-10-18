@@ -21,9 +21,9 @@ export function CaseStudyNav({ sections }: { sections: { id: string; label: stri
 
   return (
     <aside className="min-w-0 md:col-span-3 md:row-start-1">
-      <nav aria-label="Case study sections" className="md:sticky md:top-28">
-        <p className="eyebrow mb-4">Contents</p>
-        <ol className="flex gap-x-4 gap-y-2 overflow-x-auto pb-2 md:flex-col md:gap-0 md:overflow-visible md:pb-0">
+      <nav aria-label="Case study sections" className="glass rounded-2xl p-4 md:sticky md:top-24">
+        <p className="font-mono text-[11px] tracking-[0.25em] text-violet-300/80">CONTENTS</p>
+        <ol className="mt-3 flex gap-x-2 gap-y-2 overflow-x-auto pb-1 md:flex-col md:gap-0 md:overflow-visible md:pb-0">
           {sections.map((s, i) => {
             const isActive = active === s.id;
             return (
@@ -31,12 +31,9 @@ export function CaseStudyNav({ sections }: { sections: { id: string; label: stri
                 <a
                   href={`#${s.id}`}
                   aria-current={isActive ? "location" : undefined}
-                  className={`flex items-center gap-3 py-1.5 font-mono text-[0.68rem] uppercase tracking-[0.14em] transition-colors ${isActive ? "text-paper" : "text-muted hover:text-paper-dim"}`}
+                  className={`flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[13px] transition-all md:px-2 ${isActive ? "bg-violet-500/15 font-medium text-white" : "text-white/55 hover:text-white"}`}
                 >
-                  <span className="hidden h-px w-4 transition-all md:block" style={{ background: isActive ? "var(--accent)" : "var(--line)", width: isActive ? 24 : 12 }} />
-                  <span className="md:hidden" style={{ color: isActive ? "var(--accent)" : undefined }}>
-                    0{i + 1}
-                  </span>
+                  <span className={`font-mono text-[10px] ${isActive ? "text-violet-300" : "text-white/35"}`}>0{i + 1}</span>
                   {s.label}
                 </a>
               </li>

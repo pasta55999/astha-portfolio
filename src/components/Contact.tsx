@@ -1,62 +1,179 @@
-import { ArrowUpRight, Mail, FileText } from "lucide-react";
-import { GithubIcon, LinkedinIcon } from "@/components/BrandIcons";
+"use client";
+
+import { useState, type FormEvent } from "react";
+import { ArrowUpRight, Mail, MapPin, Radio, Send, FileText, Check, Sparkles } from "lucide-react";
 import { profile } from "@/data/profile";
-import { Reveal } from "@/components/ui";
+import { GithubIcon, LinkedinIcon } from "@/components/BrandIcons";
+import { Reveal, Eyebrow, GradientText, SectionBackdrop } from "@/components/ui";
+
+const subjects = ["Project collaboration", "Job opportunity", "Hackathon team", "General question"];
 
 export function Contact() {
-  const channels = [
-    profile.email && { label: "Email", value: profile.email, href: `mailto:${profile.email}`, Icon: Mail },
-    { label: "GitHub", value: `github.com/${profile.github.handle}`, href: profile.github.url, Icon: GithubIcon },
-    profile.linkedin && { label: "LinkedIn", value: profile.linkedin.replace(/^https?:\/\/(www\.)?/, ""), href: profile.linkedin, Icon: LinkedinIcon },
-    profile.resume && { label: "Resume", value: "Download PDF", href: profile.resume, Icon: FileText },
-  ].filter(Boolean) as { label: string; value: string; href: string; Icon: typeof Mail }[];
+  const cards = [
+    profile.email && { label: "Email", value: profile.email, href: `mailto:${profile.email}`, Icon: Mail, tone: "bg-gradient-to-br from-violet-500 to-indigo-600" },
+    { label: "GitHub", value: `github.com/${profile.github.handle}`, href: profile.github.url, Icon: GithubIcon, tone: "bg-white/10" },
+    profile.linkedin && { label: "LinkedIn", value: profile.linkedin.replace(/^https?:\/\/(www\.)?/, ""), href: profile.linkedin, Icon: LinkedinIcon, tone: "bg-[#0A66C2]" },
+    { label: "Location", value: profile.location, href: "https://www.google.com/maps/place/Dubai", Icon: MapPin, tone: "bg-gradient-to-br from-violet-500 to-indigo-600" },
+    profile.resume && { label: "Resume", value: "Download PDF", href: profile.resume, Icon: FileText, tone: "bg-white/10" },
+    { label: "Open to", value: "GenAI roles · hackathon teams · collaborations", href: "#contact-form", Icon: Sparkles, tone: "bg-white/10" },
+  ].filter(Boolean) as { label: string; value: string; href: string; Icon: typeof Mail; tone: string }[];
 
   return (
-    <section id="contact" className="scroll-mt-24 border-t border-line">
-      <div className="mx-auto max-w-[1400px] px-5 py-24 md:px-10 md:py-32">
-        <div className="grid gap-12 md:grid-cols-12">
-          <Reveal className="md:col-span-7">
-            <div className="flex items-start gap-3">
-              <span className="font-mono text-xs text-lime">05</span>
-              <span className="eyebrow pt-0.5">Contact</span>
-            </div>
-            <h2 className="mt-6 font-display text-[clamp(2.8rem,8vw,7rem)] leading-[0.92]">
-              Building something <span className="italic text-paper-dim">ambitious?</span>
-              <br />
-              Let&apos;s <span className="text-lime">talk.</span>
-            </h2>
-            <p className="mt-8 max-w-xl text-lg leading-relaxed text-paper-dim">
-              I&apos;m most useful on early, ambiguous problems where AI could make something genuinely easier — and where someone needs to get from idea to working prototype fast. Founders, hiring managers and fellow builders in Dubai or anywhere: say hi.
-            </p>
-          </Reveal>
+    <div className="relative overflow-hidden">
+      <SectionBackdrop variant="a" />
+      <section id="contact" className="relative z-10 flex min-h-screen scroll-mt-20 flex-col">
+        <div className="relative z-10 flex flex-1 flex-col justify-center">
+          <div className="mx-auto w-full max-w-[1440px] px-5 py-24 sm:px-8 lg:px-10 lg:py-28">
+            <div className="flex flex-col gap-y-12 md:flex-row md:items-start md:justify-between md:gap-x-10">
+              <Reveal className="min-w-0 md:w-[47%] lg:w-[38%] lg:max-w-[560px]">
+                <Eyebrow>{"// 04. Contact"}</Eyebrow>
+                <h2 className="font-display mt-6 text-[clamp(2rem,3.5vw,3.1rem)] font-extrabold leading-[1.08] tracking-tight text-white">
+                  Let&apos;s Build
+                  <br />
+                  Something
+                  <br />
+                  Ambitious <GradientText>Together.</GradientText>
+                </h2>
+                <p className="mt-4 max-w-[475px] text-[16.5px] leading-[1.62] text-white/75 sm:text-[17px]">
+                  Have a product idea, a hackathon team that needs a GenAI engineer, or an early, ambiguous problem where AI could make something genuinely easier? I&apos;d love to hear about it.
+                </p>
+                <div className="mt-9 grid grid-cols-2 gap-3 sm:gap-4 lg:gap-5">
+                  {cards.map((c) => (
+                    <a key={c.label} href={c.href} target={c.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className="group relative flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.05] p-3.5 backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-violet-400/45">
+                      <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-white sm:h-10 sm:w-10 ${c.tone}`}>
+                        <c.Icon className="h-4 w-4" />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block pr-6 text-[14px] font-bold text-white sm:text-[15px]">{c.label}</span>
+                        <span className="mt-0.5 block break-words text-[12px] text-white/55 sm:text-[13px]">{c.value}</span>
+                      </span>
+                      <ArrowUpRight className="absolute right-3 top-3 h-3.5 w-3.5 text-white/30 transition-all group-hover:text-violet-300" />
+                    </a>
+                  ))}
+                </div>
+                <figure className="mt-8 lg:mt-10">
+                  <blockquote className="font-hand text-[28px] leading-tight text-white drop-shadow-[0_2px_14px_rgba(0,0,0,0.65)] sm:text-[32px] lg:text-[34px]">“Let&apos;s turn ideas into working software.”</blockquote>
+                  <figcaption className="mt-2 font-mono text-[11px] tracking-[0.3em] text-white/55">— {profile.firstName.toUpperCase()}</figcaption>
+                </figure>
+              </Reveal>
 
-          <Reveal delay={0.1} className="md:col-span-5 md:pt-24">
-            <ul className="divide-y divide-line border-y border-line">
-              {channels.map(({ label, value, href, Icon }) => (
-                <li key={label}>
-                  <a
-                    href={href}
-                    target={href.startsWith("http") ? "_blank" : undefined}
-                    rel="noreferrer"
-                    className="group flex items-center gap-4 py-5 transition-colors hover:text-lime"
-                  >
-                    <Icon className="h-4 w-4 text-muted group-hover:text-lime" />
-                    <span className="eyebrow w-20">{label}</span>
-                    <span className="flex-1 truncate">{value}</span>
-                    <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  </a>
-                </li>
-              ))}
-            </ul>
-            {!profile.email && (
-              <p className="mt-4 font-mono text-[0.62rem] text-muted">
-                {/* Shown until an email/LinkedIn is set in src/data/profile.ts */}
-                More ways to reach me coming soon — GitHub is the fastest route for now.
-              </p>
-            )}
-          </Reveal>
+              <Reveal delay={120} className="min-w-0 md:w-[49%] lg:max-w-[725px] lg:pt-9">
+                <ContactForm />
+                <div className="mt-8 w-full">
+                  <p className="font-mono text-[11.5px] tracking-[0.3em] text-white/60">OTHER WAYS TO CONNECT</p>
+                  <div className="mt-5 flex flex-wrap gap-3">
+                    <a href={profile.github.url} target="_blank" rel="noreferrer" className="group flex h-[42px] items-center gap-2.5 rounded-full border border-white/10 bg-[#0b0716]/65 px-5 text-[14px] font-medium text-white/85 backdrop-blur-md transition-all hover:border-violet-400/45 hover:text-white">
+                      <GithubIcon className="h-4 w-4" /> GitHub
+                    </a>
+                    {profile.linkedin && (
+                      <a href={profile.linkedin} target="_blank" rel="noreferrer" className="group flex h-[42px] items-center gap-2.5 rounded-full border border-white/10 bg-[#0b0716]/65 px-5 text-[14px] font-medium text-white/85 backdrop-blur-md transition-all hover:border-violet-400/45 hover:text-white">
+                        <LinkedinIcon className="h-4 w-4" /> LinkedIn
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+/**
+ * No backend: the form composes a mailto: link to profile.email. If no email
+ * is configured yet, the message is copied to the clipboard and the visitor
+ * is pointed to GitHub — the button never silently does nothing.
+ */
+function ContactForm() {
+  const [state, setState] = useState<"idle" | "copied" | "sent">("idle");
+  const field = "mt-2 h-10 w-full rounded-lg border border-white/10 bg-black/40 px-3 text-[14px] text-white placeholder:text-white/35 outline-none transition focus:border-violet-400/60";
+
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    const name = String(fd.get("name") || "");
+    const email = String(fd.get("email") || "");
+    const subject = String(fd.get("subject") || "");
+    const message = String(fd.get("message") || "");
+    const body = `Hi Astha,\n\n${message}\n\n— ${name}${email ? ` (${email})` : ""}`;
+    if (profile.email) {
+      window.location.href = `mailto:${profile.email}?subject=${encodeURIComponent(`[Portfolio] ${subject}`)}&body=${encodeURIComponent(body)}`;
+      setState("sent");
+    } else {
+      try {
+        await navigator.clipboard.writeText(`${subject}\n\n${body}`);
+        setState("copied");
+      } catch {
+        setState("copied");
+      }
+    }
+  };
+
+  return (
+    <form id="contact-form" onSubmit={onSubmit} className="scroll-mt-28 mx-auto w-full max-w-[535px] rounded-3xl border border-violet-300/15 bg-[#0a051c]/75 p-6 shadow-[0_0_70px_-15px_rgba(139,92,246,0.4)] backdrop-blur-xl sm:p-8">
+      <div className="flex items-center gap-3">
+        <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-500/20 text-violet-300 shadow-[0_0_16px_rgba(139,92,246,0.4)]">
+          <Radio className="h-3.5 w-3.5" />
+        </span>
+        <span className="font-mono text-[11.5px] tracking-[0.3em] text-white/70">SEND A MESSAGE</span>
+      </div>
+      <h3 className="font-display mt-3 text-[clamp(1.85rem,2.6vw,2.6rem)] font-extrabold leading-tight tracking-tight text-white">
+        I&apos;m all <GradientText>ears!</GradientText>
+      </h3>
+      <p className="mt-3 text-[14px] leading-relaxed text-white/60">
+        {profile.email ? "Fill out the form and it will open in your mail app, addressed to me." : "Fill out the form — it copies your message so you can paste it wherever you reach me (GitHub for now; email coming soon)."}
+      </p>
+      <div className="mt-6 space-y-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <label htmlFor="cf-name" className="block text-[13.5px] font-medium text-white/75">
+              Your Name
+            </label>
+            <input id="cf-name" name="name" required placeholder="Jane Doe" className={field} />
+          </div>
+          <div>
+            <label htmlFor="cf-email" className="block text-[13.5px] font-medium text-white/75">
+              Your Email
+            </label>
+            <input id="cf-email" name="email" type="email" required placeholder="jane@example.com" className={field} />
+          </div>
+        </div>
+        <div>
+          <label htmlFor="cf-subject" className="block text-[13.5px] font-medium text-white/75">
+            Subject
+          </label>
+          <select id="cf-subject" name="subject" className={field} defaultValue={subjects[0]}>
+            {subjects.map((s) => (
+              <option key={s} className="bg-[#0a051c] text-white">
+                {s}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="cf-message" className="block text-[13.5px] font-medium text-white/75">
+            Message
+          </label>
+          <textarea id="cf-message" name="message" required rows={4} placeholder="Tell me about the problem you're working on…" className={`${field} h-auto py-2`} />
         </div>
       </div>
-    </section>
+      <button type="submit" className="btn-primary-glow mt-5 flex h-11 w-full items-center justify-center gap-2.5 rounded-lg bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 text-[15px] font-semibold text-white transition-transform hover:-translate-y-0.5">
+        {state === "idle" ? (
+          <>
+            <Send className="h-4 w-4" /> {profile.email ? "Send Message" : "Copy Message"}
+          </>
+        ) : state === "sent" ? (
+          <>
+            <Check className="h-4 w-4" /> Opening your mail app…
+          </>
+        ) : (
+          <>
+            <Check className="h-4 w-4" /> Copied — paste it to me on GitHub
+          </>
+        )}
+      </button>
+    </form>
   );
 }

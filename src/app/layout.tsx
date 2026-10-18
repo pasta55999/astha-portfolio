@@ -1,23 +1,19 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { Inter, Sora, Caveat, Geist_Mono } from "next/font/google";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { Providers } from "@/components/Providers";
 import { profile } from "@/data/profile";
 import "./globals.css";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
+const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
+const sora = Sora({ variable: "--font-sora", subsets: ["latin"], weight: ["400", "500", "600", "700", "800"] });
+const caveat = Caveat({ variable: "--font-caveat", subsets: ["latin"], weight: ["400", "500", "600", "700"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
-const instrument = Instrument_Serif({
-  variable: "--font-instrument",
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-});
 
 const title = `${profile.name} — ${profile.role}`;
 const description =
-  "GenAI engineer in Dubai who turns ambitious ideas into working products: voice-first tutors, agentic systems, climate-risk intelligence and evaluation loops.";
+  "Generative AI Engineer in Dubai building intelligent products: bilingual voice tutors, agentic systems, climate-risk intelligence, browser assistants and evaluation loops.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(profile.siteUrl),
@@ -28,24 +24,26 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-export const viewport: Viewport = { themeColor: "#0b0b0f", width: "device-width", initialScale: 1 };
+export const viewport: Viewport = { themeColor: "#05010f", width: "device-width", initialScale: 1 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${instrument.variable} h-full`}>
-      <body className="grain min-h-full flex flex-col">
+    <html lang="en" className={`${inter.variable} ${sora.variable} ${caveat.variable} ${geistMono.variable} h-full`}>
+      <body className="min-h-full bg-background text-foreground antialiased">
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:bg-lime focus:text-lime-ink focus:px-3 focus:py-2 focus:text-sm"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-lg focus:bg-violet-600 focus:px-3 focus:py-2 focus:text-sm focus:text-white"
         >
           Skip to content
         </a>
         <Providers>
-          <Nav />
-          <main id="main" className="flex-1">
-            {children}
-          </main>
-          <Footer />
+          <div className="relative flex min-h-screen flex-col">
+            <Nav />
+            <main id="main" className="relative flex flex-1 flex-col">
+              {children}
+            </main>
+            <Footer />
+          </div>
         </Providers>
       </body>
     </html>

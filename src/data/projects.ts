@@ -8,7 +8,7 @@
  * /projects/[slug] page automatically.
  */
 
-export type Accent = "lime" | "coral" | "cobalt" | "amber";
+export type Accent = "violet" | "indigo" | "emerald" | "amber";
 export type Status = "idea" | "concept" | "prototype" | "working-demo" | "deployed";
 export type Visual = "guidr" | "trace" | "reelcall" | "wish" | "tell" | "brandorbit" | "rag";
 
@@ -63,10 +63,10 @@ export const statusLabel: Record<Status, string> = {
 };
 
 export const accentVar: Record<Accent, string> = {
-  lime: "var(--lime)",
-  coral: "var(--coral)",
-  cobalt: "var(--cobalt)",
-  amber: "var(--amber)",
+  violet: "var(--violet-400)",
+  indigo: "var(--indigo-400)",
+  emerald: "var(--emerald-400)",
+  amber: "var(--amber-300)",
 };
 
 export const projects: Project[] = [
@@ -77,7 +77,7 @@ export const projects: Project[] = [
     name: "Guidr",
     tagline: "A bilingual voice tutor that talks you through real software, one step at a time.",
     category: ["Agentic AI", "Voice Interfaces", "Browser Automation"],
-    accent: "lime",
+    accent: "violet",
     visual: "guidr",
     status: "working-demo",
     statusNote:
@@ -184,7 +184,7 @@ export const reportAction = mutation({
     name: "Trace",
     tagline: "Climate financial-risk intelligence for UAE lenders, with agents that are allowed to learn — inside a fence.",
     category: ["Climate Intelligence", "AI Agents", "Risk Analysis"],
-    accent: "cobalt",
+    accent: "indigo",
     visual: "trace",
     status: "prototype",
     statusNote:
@@ -261,7 +261,7 @@ export const reportAction = mutation({
     name: "Reelcall",
     tagline: "You saved it. We remember it. A memory layer for the reels you'll never find again.",
     category: ["Multimodal AI", "Search", "Creator Economy"],
-    accent: "coral",
+    accent: "emerald",
     visual: "reelcall",
     status: "prototype",
     statusNote:
@@ -426,7 +426,7 @@ export const reportAction = mutation({
     name: "Tell",
     tagline: "Every business has a tell. Acquisition diligence for e-commerce — offline, evidence-linked, rule-based.",
     category: ["Decision Support", "Data Reconciliation", "Analytics"],
-    accent: "lime",
+    accent: "violet",
     visual: "tell",
     status: "working-demo",
     statusNote:
@@ -490,7 +490,7 @@ export const reportAction = mutation({
     name: "BrandOrbit",
     tagline: "See how AI sees your brand.",
     category: ["LLM Monitoring", "Brand Intelligence", "Evaluation"],
-    accent: "cobalt",
+    accent: "indigo",
     visual: "brandorbit",
     status: "working-demo",
     statusNote:
@@ -539,7 +539,7 @@ export const reportAction = mutation({
     name: "Support Agent + Eval Loop",
     tagline: "A RAG support agent that knows when to hand off — and an evaluation loop that can't be gamed.",
     category: ["RAG", "Evaluation", "Local LLMs"],
-    accent: "coral",
+    accent: "emerald",
     visual: "rag",
     status: "prototype",
     statusNote:

@@ -1,19 +1,19 @@
 import { Hero } from "@/components/Hero";
+import { About } from "@/components/About";
 import { ProjectShowcase } from "@/components/ProjectShowcase";
 import { ThinkingExplorer } from "@/components/ThinkingExplorer";
-import { About } from "@/components/About";
+import { Skills } from "@/components/Skills";
 import { Experience } from "@/components/Experience";
 import { Contact } from "@/components/Contact";
-import { Marquee } from "@/components/Marquee";
 
 export default function Home() {
   return (
     <>
       <Hero />
-      <Marquee />
+      <About />
       <ProjectShowcase />
       <ThinkingExplorer />
-      <About />
+      <Skills />
       <Experience />
       <Contact />
     </>

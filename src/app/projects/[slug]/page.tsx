@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, ArrowUpRight, Globe, Play, BookOpen } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Globe, Play, BookOpen, Users, Layers, Activity } from "lucide-react";
 import { GithubIcon } from "@/components/BrandIcons";
 import { projects, getProject, accentVar, statusLabel } from "@/data/projects";
 import { ProjectVisual } from "@/components/ProjectVisual";
-import { Reveal, StatusPill, Tag } from "@/components/ui";
+import { Reveal, StatusPill, GradientText, SectionBackdrop } from "@/components/ui";
 import { CaseStudyNav } from "@/components/CaseStudyNav";
 
 export function generateStaticParams() {
@@ -17,11 +17,7 @@ export async function generateMetadata({ params }: PageProps<"/projects/[slug]">
   const { slug } = await params;
   const p = getProject(slug);
   if (!p) return {};
-  return {
-    title: `${p.name} — case study`,
-    description: p.tagline,
-    openGraph: { title: `${p.name} — ${p.category.join(" · ")}`, description: p.tagline },
-  };
+  return { title: `${p.name} — case study`, description: p.tagline, openGraph: { title: `${p.name} — ${p.category.join(" · ")}`, description: p.tagline } };
 }
 
 const sections = [
@@ -54,93 +50,95 @@ async function ProjectArticle({ params }: { params: PageProps<"/projects/[slug]"
   const prev = projects[(idx - 1 + projects.length) % projects.length];
   const cs = p.caseStudy;
   const { repo, demo, video, docs } = p.links;
-
-  const linkCls = "inline-flex items-center gap-2 border border-line-strong px-4 py-2.5 font-mono text-[0.68rem] uppercase tracking-[0.16em] hover:bg-paper hover:text-ink transition-colors";
+  const linkCls = "pill px-4 py-2.5 text-[13px] font-medium text-white/85";
 
   return (
-    <article style={{ ["--accent" as string]: accent }}>
-      {/* header */}
-      <header className="relative overflow-hidden border-b border-line">
-        <div className="pointer-events-none absolute inset-0 opacity-20" style={{ background: `radial-gradient(50% 60% at 80% 0%, ${accent}, transparent 70%)` }} aria-hidden />
-        <div className="relative mx-auto max-w-[1400px] px-5 pb-16 pt-28 md:px-10 md:pt-36">
+    <article style={{ ["--accent" as string]: accent }} className="relative overflow-hidden">
+      <SectionBackdrop variant="a" fadeTop={false} />
+
+      <header className="relative z-10">
+        <div className="mx-auto max-w-7xl px-5 pb-14 pt-28 sm:px-8 md:pt-36">
           <Reveal>
-            <Link href="/#work" className="inline-flex items-center gap-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-muted hover:text-paper">
-              <ArrowLeft className="h-3.5 w-3.5" /> Back to work
+            <Link href="/#projects" className="inline-flex items-center gap-2 text-sm text-white/60 transition-colors hover:text-white">
+              <ArrowLeft className="h-4 w-4" /> Back to projects
             </Link>
-            <div className="mt-10 flex flex-wrap items-center gap-3">
-              <span className="font-mono text-xs" style={{ color: accent }}>
-                Project {p.number}
-              </span>
-              <StatusPill status={p.status} accent={p.accent} />
-              <span className="font-mono text-[0.65rem] uppercase tracking-[0.16em] text-muted">{p.year}</span>
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <span className="eyebrow">{`// Project ${p.number}`}</span>
+              <StatusPill status={p.status} />
+              <span className="font-mono text-xs text-white/50">{p.year}</span>
             </div>
-            <h1 className="mt-6 font-display text-[clamp(3rem,10vw,9rem)] leading-[0.9]">{p.name}</h1>
-            <p className="mt-6 max-w-3xl text-2xl leading-snug md:text-3xl text-balance">{p.tagline}</p>
-            <div className="mt-6 flex flex-wrap gap-x-5 gap-y-1">
+            <h1 className="font-display mt-5 text-[clamp(2.8rem,7vw,5.5rem)] font-extrabold leading-[0.98] tracking-tight text-white">{p.name}</h1>
+            <p className="mt-5 max-w-3xl text-xl leading-snug text-white/80 sm:text-2xl">{p.tagline}</p>
+            <div className="mt-5 flex flex-wrap gap-2">
               {p.category.map((c) => (
-                <Tag key={c} accent={p.accent}>
+                <span key={c} className="tag">
                   {c}
-                </Tag>
+                </span>
               ))}
             </div>
           </Reveal>
 
-          <Reveal delay={0.1} className="mt-12 grid gap-8 md:grid-cols-12">
-            <div className="md:col-span-8">
+          <Reveal delay={100} className="mt-10 grid gap-6 lg:grid-cols-12">
+            <div className="card overflow-hidden rounded-3xl lg:col-span-8">
               <ProjectVisual visual={p.visual} accent={p.accent} className="aspect-[16/10]" />
             </div>
-            <dl className="md:col-span-4 grid content-start gap-5 text-sm">
+            <aside className="glass flex flex-col gap-5 rounded-3xl p-5 text-sm lg:col-span-4">
               <div>
-                <dt className="eyebrow">Status</dt>
-                <dd className="mt-1.5 leading-relaxed text-paper-dim">{p.statusNote}</dd>
+                <p className="flex items-center gap-2 font-mono text-[11px] tracking-[0.25em] text-violet-300/80">
+                  <Activity className="h-3.5 w-3.5" /> STATUS
+                </p>
+                <p className="mt-2 leading-relaxed text-white/70">{p.statusNote}</p>
               </div>
               <div>
-                <dt className="eyebrow">Team</dt>
-                <dd className="mt-1.5 text-paper-dim">{p.team}</dd>
+                <p className="flex items-center gap-2 font-mono text-[11px] tracking-[0.25em] text-violet-300/80">
+                  <Users className="h-3.5 w-3.5" /> TEAM
+                </p>
+                <p className="mt-2 text-white/70">{p.team}</p>
               </div>
               <div>
-                <dt className="eyebrow">Stack</dt>
-                <dd className="mt-1.5 flex flex-wrap gap-1.5">
+                <p className="flex items-center gap-2 font-mono text-[11px] tracking-[0.25em] text-violet-300/80">
+                  <Layers className="h-3.5 w-3.5" /> STACK
+                </p>
+                <div className="mt-2 flex flex-wrap gap-1.5">
                   {p.stack.map((s) => (
-                    <span key={s} className="border border-line px-2 py-0.5 font-mono text-[0.62rem] text-paper-dim">
+                    <span key={s} className="rounded-md border border-white/10 bg-white/[0.04] px-2 py-0.5 font-mono text-[11px] text-white/70">
                       {s}
                     </span>
                   ))}
-                </dd>
+                </div>
               </div>
-              <div className="flex flex-wrap gap-2 pt-2">
+              <div className="mt-auto flex flex-wrap gap-2 pt-2">
                 {repo && (
                   <a href={repo} target="_blank" rel="noreferrer" className={linkCls}>
-                    <GithubIcon className="h-3.5 w-3.5" /> Repository
+                    <GithubIcon className="h-4 w-4" /> Repository
                   </a>
                 )}
                 {demo && (
                   <a href={demo} target="_blank" rel="noreferrer" className={linkCls}>
-                    <Globe className="h-3.5 w-3.5" /> Live demo
+                    <Globe className="h-4 w-4" /> Live demo
                   </a>
                 )}
                 {video && (
                   <a href={video} target="_blank" rel="noreferrer" className={linkCls}>
-                    <Play className="h-3.5 w-3.5" /> Demo video
+                    <Play className="h-4 w-4" /> Demo video
                   </a>
                 )}
                 {docs && (
                   <a href={docs} target="_blank" rel="noreferrer" className={linkCls}>
-                    <BookOpen className="h-3.5 w-3.5" /> Docs
+                    <BookOpen className="h-4 w-4" /> Docs
                   </a>
                 )}
-                {!repo && !demo && !video && <span className="font-mono text-[0.62rem] text-muted">Repository link coming soon.</span>}
+                {!repo && !demo && !video && <span className="font-mono text-[11px] text-white/45">Repository link coming soon.</span>}
               </div>
-            </dl>
+            </aside>
           </Reveal>
         </div>
       </header>
 
-      {/* body */}
-      <div className="mx-auto grid max-w-[1400px] gap-12 px-5 py-20 md:grid-cols-12 md:px-10 md:py-28">
+      <div className="relative z-10 mx-auto grid max-w-7xl gap-12 px-5 py-16 sm:px-8 md:grid-cols-12 md:py-20">
         <CaseStudyNav sections={sections.map(([id, label]) => ({ id, label }))} />
 
-        <div className="min-w-0 md:col-span-9 md:col-start-4 space-y-24">
+        <div className="min-w-0 space-y-20 md:col-span-9 md:col-start-4">
           <Block id="problem" n="01" title="The problem" paras={cs.problem} />
           <Block id="insight" n="02" title="The insight" paras={cs.insight} lead />
           <Block id="solution" n="03" title="The solution" paras={cs.solution}>
@@ -149,29 +147,34 @@ async function ProjectArticle({ params }: { params: PageProps<"/projects/[slug]"
           <Block id="contribution" n="04" title="My contribution" list={cs.contribution} note={p.team} />
           <Block id="implementation" n="05" title="Technical implementation" paras={cs.implementation}>
             {cs.code && (
-              <figure className="mt-10 overflow-hidden border border-line bg-ink-2">
-                <figcaption className="flex items-center justify-between border-b border-line px-4 py-2.5 font-mono text-[0.62rem] uppercase tracking-[0.16em] text-muted">
-                  <span>{cs.code.title}</span>
+              <figure className="card mt-8 overflow-hidden rounded-2xl">
+                <figcaption className="flex items-center justify-between border-b border-white/10 px-4 py-2.5 font-mono text-[11px] uppercase tracking-[0.2em] text-white/50">
+                  <span className="flex items-center gap-2">
+                    <span className="flex gap-1">
+                      <span className="h-2.5 w-2.5 rounded-full bg-rose-300/70" />
+                      <span className="h-2.5 w-2.5 rounded-full bg-amber-300/70" />
+                      <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/70" />
+                    </span>
+                    {cs.code.title}
+                  </span>
                   <span>{cs.code.lang}</span>
                 </figcaption>
-                <pre className="overflow-x-auto p-4 text-[0.78rem] leading-relaxed text-paper-dim">
+                <pre className="overflow-x-auto bg-black/30 p-4 text-[0.78rem] leading-relaxed text-violet-100/85">
                   <code>{cs.code.code}</code>
                 </pre>
-                {cs.code.note && <p className="border-t border-line px-4 py-3 text-sm text-muted">{cs.code.note}</p>}
+                {cs.code.note && <p className="border-t border-white/10 px-4 py-3 text-sm text-white/55">{cs.code.note}</p>}
               </figure>
             )}
           </Block>
 
           <section id="decisions" className="scroll-mt-28">
-            <Heading n="06" title="Key engineering decisions" />
-            <div className="mt-8 grid gap-px bg-line sm:grid-cols-2">
+            <BlockHeading n="06" title="Key engineering decisions" />
+            <div className="mt-6 grid gap-4 sm:grid-cols-2">
               {cs.decisions.map((d, i) => (
-                <Reveal key={d.title} delay={i * 0.05} className="bg-ink p-6">
-                  <span className="font-mono text-[0.62rem]" style={{ color: accent }}>
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <h3 className="mt-3 font-display text-2xl leading-tight">{d.title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-paper-dim">{d.body}</p>
+                <Reveal key={d.title} delay={i * 60} className="card rounded-2xl p-5">
+                  <span className="font-mono text-[11px] text-violet-300">{String(i + 1).padStart(2, "0")}</span>
+                  <h3 className="font-display mt-2 text-lg font-bold leading-tight text-white">{d.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-white/60">{d.body}</p>
                 </Reveal>
               ))}
             </div>
@@ -180,10 +183,10 @@ async function ProjectArticle({ params }: { params: PageProps<"/projects/[slug]"
           <Block id="challenges" n="07" title="Challenges & iteration" list={cs.challenges} />
 
           <section id="status" className="scroll-mt-28">
-            <Heading n="08" title="Current status" />
-            <Reveal className="mt-8 border-l-2 pl-6" style={{ borderColor: accent }}>
-              <p className="font-display text-3xl">{statusLabel[p.status]}</p>
-              <p className="mt-3 max-w-2xl leading-relaxed text-paper-dim">{p.statusNote}</p>
+            <BlockHeading n="08" title="Current status" />
+            <Reveal className="glass mt-6 rounded-2xl border-l-4 p-5" style={{ borderLeftColor: accent }}>
+              <p className="font-display text-2xl font-bold text-white">{statusLabel[p.status]}</p>
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/65">{p.statusNote}</p>
             </Reveal>
           </section>
 
@@ -191,48 +194,43 @@ async function ProjectArticle({ params }: { params: PageProps<"/projects/[slug]"
         </div>
       </div>
 
-      {/* prev/next */}
-      <nav aria-label="Other projects" className="border-t border-line">
-        <div className="mx-auto grid max-w-[1400px] md:grid-cols-2">
-          <Link href={`/projects/${prev.slug}`} className="group flex items-center justify-between gap-6 border-b border-line px-5 py-10 md:border-b-0 md:border-r md:px-10">
+      <nav aria-label="Other projects" className="relative z-10 border-t border-white/10">
+        <div className="mx-auto grid max-w-7xl gap-4 px-5 py-10 sm:px-8 md:grid-cols-2">
+          <Link href={`/projects/${prev.slug}`} className="card group flex items-center justify-between gap-6 rounded-2xl p-6">
             <div>
-              <span className="eyebrow inline-flex items-center gap-2">
+              <span className="eyebrow inline-flex items-center gap-2 !text-[11px]">
                 <ArrowLeft className="h-3 w-3" /> Previous
               </span>
-              <p className="mt-3 font-display text-4xl md:text-5xl">{prev.name}</p>
+              <p className="font-display mt-2 text-2xl font-bold text-white sm:text-3xl">{prev.name}</p>
             </div>
           </Link>
-          <Link href={`/projects/${next.slug}`} className="group flex items-center justify-between gap-6 px-5 py-10 text-right md:px-10">
+          <Link href={`/projects/${next.slug}`} className="card group flex items-center justify-between gap-6 rounded-2xl p-6 text-right">
             <div className="ml-auto">
-              <span className="eyebrow inline-flex items-center gap-2">
+              <span className="eyebrow inline-flex items-center gap-2 !text-[11px]">
                 Next <ArrowRight className="h-3 w-3" />
               </span>
-              <p className="mt-3 font-display text-4xl md:text-5xl">{next.name}</p>
+              <p className="font-display mt-2 text-2xl font-bold text-white sm:text-3xl">{next.name}</p>
             </div>
           </Link>
         </div>
-        <div className="border-t border-line">
-          <div className="mx-auto flex max-w-[1400px] items-center justify-between px-5 py-5 md:px-10">
-            <Link href="/projects" className="link-ul font-mono text-[0.68rem] uppercase tracking-[0.16em] text-muted hover:text-paper">
-              All projects
-            </Link>
-            <Link href="/#thinking" className="link-ul inline-flex items-center gap-1 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-muted hover:text-paper">
-              See the reasoning <ArrowUpRight className="h-3.5 w-3.5" />
-            </Link>
-          </div>
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 pb-10 sm:px-8">
+          <Link href="/projects" className="text-sm text-white/60 hover:text-white">
+            All projects
+          </Link>
+          <Link href="/#thinking" className="inline-flex items-center gap-1 text-sm font-semibold text-violet-300 hover:text-white">
+            See the reasoning <ArrowUpRight className="h-4 w-4" />
+          </Link>
         </div>
       </nav>
     </article>
   );
 }
 
-function Heading({ n, title }: { n: string; title: string }) {
+function BlockHeading({ n, title }: { n: string; title: string }) {
   return (
     <Reveal className="flex items-baseline gap-4">
-      <span className="font-mono text-xs" style={{ color: "var(--accent)" }}>
-        {n}
-      </span>
-      <h2 className="font-display text-3xl md:text-4xl">{title}</h2>
+      <span className="font-mono text-xs text-violet-300">{n}</span>
+      <h2 className="font-display text-2xl font-extrabold tracking-tight text-white sm:text-3xl">{title}</h2>
     </Reveal>
   );
 }
@@ -240,24 +238,24 @@ function Heading({ n, title }: { n: string; title: string }) {
 function Block({ id, n, title, paras, list, lead, note, children }: { id: string; n: string; title: string; paras?: string[]; list?: string[]; lead?: boolean; note?: string; children?: React.ReactNode }) {
   return (
     <section id={id} className="scroll-mt-28">
-      <Heading n={n} title={title} />
-      <div className="mt-8 max-w-3xl space-y-5">
+      <BlockHeading n={n} title={title} />
+      <div className="mt-6 max-w-3xl space-y-4">
         {paras?.map((t, i) => (
-          <Reveal as="p" key={i} delay={i * 0.04} className={lead && i === 0 ? "font-display text-2xl leading-snug md:text-3xl" : "leading-relaxed text-paper-dim md:text-lg"}>
+          <Reveal as="p" key={i} delay={i * 40} className={lead && i === 0 ? "text-lg font-medium leading-relaxed text-white sm:text-xl" : "leading-relaxed text-white/65 sm:text-[17px]"}>
             {t}
           </Reveal>
         ))}
         {list && (
           <ul className="space-y-3">
             {list.map((t, i) => (
-              <Reveal as="li" key={i} delay={i * 0.04} className="flex gap-4 leading-relaxed text-paper-dim md:text-lg">
-                <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: "var(--accent)" }} />
+              <Reveal as="li" key={i} delay={i * 40} className="flex gap-3 leading-relaxed text-white/65 sm:text-[17px]">
+                <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-violet-400 shadow-[0_0_10px_rgba(139,92,246,0.8)]" />
                 <span>{t}</span>
               </Reveal>
             ))}
           </ul>
         )}
-        {note && <p className="font-mono text-[0.65rem] uppercase tracking-[0.16em] text-muted">{note}</p>}
+        {note && <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/45">{note}</p>}
       </div>
       {children}
     </section>
@@ -266,21 +264,22 @@ function Block({ id, n, title, paras, list, lead, note, children }: { id: string
 
 function Flow({ steps }: { steps: string[] }) {
   return (
-    <Reveal className="mt-10">
-      <p className="eyebrow mb-4">How a request moves through the system</p>
-      <ol className="flex flex-wrap items-stretch gap-2">
+    <Reveal className="glass mt-8 rounded-2xl p-5">
+      <p className="font-mono text-[11px] tracking-[0.25em] text-violet-300/80">HOW A REQUEST MOVES THROUGH THE SYSTEM</p>
+      <ol className="mt-4 flex flex-wrap items-stretch gap-2">
         {steps.map((s, i) => (
           <li key={s} className="flex items-center gap-2">
-            <span className="border border-line bg-ink-2 px-3 py-2 font-mono text-[0.68rem] text-paper">
-              <span className="mr-2" style={{ color: "var(--accent)" }}>
-                {i + 1}
-              </span>
+            <span className="rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-[13px] text-white/85">
+              <span className="mr-2 font-mono text-violet-300">{i + 1}</span>
               {s}
             </span>
-            {i < steps.length - 1 && <ArrowRight className="h-3.5 w-3.5 text-muted" aria-hidden />}
+            {i < steps.length - 1 && <ArrowRight className="h-3.5 w-3.5 text-white/35" aria-hidden />}
           </li>
         ))}
       </ol>
+      <p className="mt-4 text-xs text-white/40">
+        <GradientText>Interactive walkthrough</GradientText> of this reasoning is on the home page under “Inside my thinking”.
+      </p>
     </Reveal>
   );
 }

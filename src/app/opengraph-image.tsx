@@ -16,25 +16,19 @@ export default function OpenGraphImage() {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: 72,
-          background: "#0b0b0f",
-          color: "#f4f1ea",
-          fontFamily: "Georgia, serif",
+          background: "radial-gradient(60% 50% at 85% 15%, rgba(124,58,237,0.45), transparent 60%), radial-gradient(45% 45% at 10% 90%, rgba(79,70,229,0.4), transparent 60%), #05010f",
+          color: "#f4f2ff",
+          fontFamily: "Inter, Arial, sans-serif",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 16, fontSize: 22, letterSpacing: 4, color: "#d4ff3f", fontFamily: "monospace" }}>
-          <svg width="40" height="40" viewBox="0 0 32 32" fill="none">
-            <path d="M6 27 16 5l10 22" stroke="#d4ff3f" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M10.5 19h11" stroke="#d4ff3f" strokeWidth="2.4" strokeLinecap="round" />
-          </svg>
-          {profile.eyebrow.toUpperCase()}
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", fontSize: 104, lineHeight: 0.95, letterSpacing: -3 }}>
-          <span>{profile.headline[0]}</span>
-          <span>
-            <span style={{ color: "#b9b6ae", fontStyle: "italic" }}>Built to</span> make things <span style={{ color: "#d4ff3f" }}>happen.</span>
+        <div style={{ display: "flex", fontSize: 20, letterSpacing: 7, color: "#c4b4ff", fontFamily: "monospace" }}>{`// ${profile.role} · ${profile.location}`.toUpperCase()}</div>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <span style={{ fontSize: 120, fontWeight: 800, lineHeight: 0.95, letterSpacing: -4, color: "#fff" }}>{profile.firstName}</span>
+          <span style={{ marginTop: 18, fontSize: 48, fontWeight: 700, lineHeight: 1.1, letterSpacing: -1 }}>
+            {profile.headline[0]} {profile.headline[1]} <span style={{ color: "#a685ff" }}>{profile.headline[2]}</span>
           </span>
         </div>
-        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 26, color: "#b9b6ae", fontFamily: "monospace" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 24, color: "rgba(244,242,255,0.6)" }}>
           <span>{profile.name}</span>
           <span>github.com/{profile.github.handle}</span>
         </div>
