@@ -84,10 +84,17 @@ export function Footer() {
             <ul className="mt-4 space-y-2.5">
               {places.map((p) => (
                 <li key={p.href}>
-                  <a href={p.href} target={p.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className="group flex items-center justify-between gap-6 py-0.5 text-[15px] text-white/65 transition-colors hover:text-white">
-                    <span>{p.label}</span>
-                    <ArrowUpRight className="h-3.5 w-3.5 opacity-0 transition-all group-hover:opacity-100" />
-                  </a>
+                  {p.href.startsWith("http") ? (
+                    <a href={p.href} target="_blank" rel="noreferrer" className="group flex items-center justify-between gap-6 py-0.5 text-[15px] text-white/65 transition-colors hover:text-white">
+                      <span>{p.label}</span>
+                      <ArrowUpRight className="h-3.5 w-3.5 opacity-0 transition-all group-hover:opacity-100" />
+                    </a>
+                  ) : (
+                    <Link href={p.href} className="group flex items-center justify-between gap-6 py-0.5 text-[15px] text-white/65 transition-colors hover:text-white">
+                      <span>{p.label}</span>
+                      <ArrowRight className="h-3.5 w-3.5 -translate-x-1 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100" />
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
