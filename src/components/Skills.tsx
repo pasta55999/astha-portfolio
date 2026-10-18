@@ -110,7 +110,7 @@ export function Skills() {
             <Reveal className="glass flex flex-wrap items-center gap-x-5 gap-y-4 rounded-2xl px-5 py-4 lg:flex-nowrap">
               {[
                 { Icon: Code2, v: `${all.length}`, l: "Skills, each with evidence" },
-                { Icon: Layers, v: `${profile.stats[0].value}`, l: "Projects" },
+                { Icon: Layers, v: profile.stats[0].value, l: profile.stats[0].label },
                 { Icon: Zap, v: `${profile.stats[1].value}`, l: "Hackathons" },
                 { Icon: Heart, v: "Always", l: "Learning" },
               ].map(({ Icon, v, l }, i) => (

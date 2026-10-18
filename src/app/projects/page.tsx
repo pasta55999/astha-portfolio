@@ -19,7 +19,7 @@ export default function ProjectsPage() {
         <Reveal className="text-center">
           <Eyebrow>{"// Index"}</Eyebrow>
           <Heading center className="mx-auto mt-4 max-w-3xl">
-            All projects, <GradientText>{projects.length} and counting.</GradientText>
+            From idea to <GradientText>working software.</GradientText>
           </Heading>
           <p className="mx-auto mt-4 max-w-2xl text-base text-white/55 sm:text-lg">
             Every entry links to its repository where one is public and states exactly what is built versus planned.

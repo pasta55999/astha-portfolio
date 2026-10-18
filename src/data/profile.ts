@@ -55,7 +55,7 @@ export const profile = {
 
   /** Verified counts — update as the data files change. */
   stats: [
-    { value: "7", label: "Open-source builds" },
+    { value: "End-to-end", label: "Idea to shipped software" },
     { value: "20+", label: "Hackathons" },
     { value: "~2 yrs", label: "AI in startups" },
     { value: "Always", label: "Curious" },

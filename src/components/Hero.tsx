@@ -166,7 +166,8 @@ export function Hero() {
                   </p>
                 </div>
               </div>
-              <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.9, ease }} className="glass-strong absolute -bottom-6 right-0 hidden w-[300px] rounded-2xl p-[1px] md:block">
+              {/* terminal sits below the illustration in normal flow so it never overlaps the scene */}
+              <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.9, ease }} className="glass-strong relative mx-auto mt-6 hidden w-full max-w-[340px] rounded-2xl p-[1px] md:block lg:mr-6 lg:ml-auto">
                 <div className="rounded-2xl bg-[#07031a]/85 p-3.5 font-mono text-[11px] leading-relaxed shadow-[0_0_40px_rgba(139,92,246,0.18)]">
                   <div className="flex items-center gap-1.5 border-b border-white/10 pb-2">
                     <span className="h-2 w-2 rounded-full bg-rose-300/70" />

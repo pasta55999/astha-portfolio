@@ -49,6 +49,8 @@ export type Project = {
     implementation: string[];
     flow: string[];
     decisions: Decision[];
+    /** Measured outcomes only; omit rather than estimate. */
+    results?: string[];
     challenges: string[];
     next: string[];
     code?: CodeExcerpt;
@@ -544,15 +546,15 @@ export const reportAction = mutation({
     category: ["RAG", "Evaluation", "Local LLMs"],
     accent: "emerald",
     visual: "rag",
-    status: "prototype",
+    status: "working-demo",
     statusNote:
-      "Working local build; evaluation runs are in progress (only the v0 no-retrieval baseline has been logged to results.md so far). Everything runs offline on a laptop CPU. Public repository link to be added.",
+      "Working local build with all four pipeline versions evaluated on the 53-question test split. Everything runs offline on a laptop CPU/GPU with local models; no API keys.",
     year: "2026",
     team: "Solo",
     summary:
       "A customer-support agent for a fictional outdoor retailer that answers policy questions from a document corpus, cites its sources, and escalates to a human with a structured reason when it shouldn't answer. The point isn't the chatbot — it's the 68-question gold set, calibrated thresholds and four committed pipeline versions around it.",
     stack: ["Python 3.11", "Ollama (qwen2.5:3b)", "bge-small embeddings", "Chroma", "BM25 + RRF", "Cross-encoder rerank", "FastAPI", "Streamlit", "uv", "mypy"],
-    links: {}, // TODO: add the GitHub URL once the repository is published
+    links: { repo: "https://github.com/pasta55999/support-agent-rag-eval" },
     caseStudy: {
       problem: ["Most RAG demos measure nothing, or measure a metric that rewards answering everything. A support agent's hardest decision is when not to answer — legal threats, safety, fraud, an angry customer, an account-specific question — and that decision needs its own precision and recall."],
       insight: [
@@ -573,15 +575,24 @@ export const reportAction = mutation({
         { title: "Local models only", body: "Reproducible on a laptop with no keys. The trade-off — a 3B model and slow p95 — is accepted and documented in ADR 0001." },
         { title: "Separate judge, verifiable rubric", body: "Judging with the same model that answered inflates scores; the judge is a different model with sub-judgements that can be checked." },
       ],
-      challenges: ["Writing a gold set that is hard in the right ways (conflicting policies, false premises) rather than just long.", "Keeping the whole loop fast enough on CPU to iterate — the v0 baseline p95 is over 12 seconds."],
-      next: ["Finish and publish v1–v3 runs so the progression table is real.", "Publish the repository.", "Try a 7B model and measure the accuracy/latency trade-off."],
+      results: [
+        "Headline accuracy on the test split: v0 7.5% → v1 32.1% → v2 28.3% → v3 47.2%. v3 is the only version whose accuracy is not capped at 68%, because it is the only one that escalates.",
+        "Escalation went from F1 0 to 0.75 (precision 0.65, recall 0.88) with the escalation reason right 80% of the time; retrieval recall@5 92.9% → 98.1%, citation precision 92%, faithfulness 92%.",
+        "The first v3 run escalated 33 of 36 answerable questions. The traces attributed it to a 3B self-check that answered NO to supported drafts, a citation parser that rejected the `[a, b]` format the model writes, and a cross-encoder that scores slang near zero; each was fixed with a check that can be verified rather than a prompt tweak.",
+      ],
+      challenges: [
+        "Writing a gold set that is hard in the right ways (conflicting policies, false premises) rather than just long.",
+        "The same 3B model is unusable as a judge: it marked plainly correct answers partial. A separate 4B judge with quote-and-verify sub-judgements fixed most of it; the remaining noise is reported alongside deterministic numeric exact-match.",
+        "Better retrieval did not move end-to-end accuracy from v1 to v2 — a normal RAG result worth stating plainly rather than hiding behind the retrieval metrics.",
+      ],
+      next: ["Add a dense-cosine floor to the confidence signal to close the slang blind spot.", "Allow derived arithmetic through numeric grounding when a calculator reproduces it.", "Grow the eval set from real transcripts and add bootstrap confidence intervals."],
     },
     thinking: {
       problem: "RAG demos rarely measure anything, and a support agent's hardest call is when not to answer.",
       insight: "One un-gameable bit per question, escalation scored as its own classifier, thresholds tuned only on a dev split, and a committed version history so the progression is reproducible.",
       design: "Rule gates → hybrid retrieval with RRF → rerank → confidence gate → grounded generation → citation and self-check gates, every stage a YAML flag, every run traced.",
-      prototype: "68-question gold set across nine categories, four configs, local LLM judge, calibration script, CI regression gate, FastAPI and Streamlit trace inspector. v0 baseline logged; v1–v3 runs in progress.",
-      next: "Finish the runs, publish the repo, test a larger local model.",
+      prototype: "68-question gold set across nine categories, four configs, separate local judge with a verifiable rubric, calibration script, CI regression gate, FastAPI and Streamlit trace inspector. Accuracy 7.5% → 47.2% across v0–v3; escalation F1 0 → 0.75.",
+      next: "Close the slang blind spot in the confidence signal, let verified arithmetic through, grow the eval set.",
     },
   },
 ];

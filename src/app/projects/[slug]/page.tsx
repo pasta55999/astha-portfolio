@@ -27,6 +27,7 @@ const sections = [
   ["contribution", "My contribution"],
   ["implementation", "Technical implementation"],
   ["decisions", "Key engineering decisions"],
+  ["results", "Measured results"],
   ["challenges", "Challenges & iteration"],
   ["status", "Current status"],
   ["next", "Next steps"],
@@ -141,7 +142,7 @@ async function ProjectArticle({ params }: { params: PageProps<"/projects/[slug]"
       </header>
 
       <div className="relative z-10 mx-auto grid max-w-7xl gap-12 px-5 py-16 sm:px-8 md:grid-cols-12 md:py-20">
-        <CaseStudyNav sections={sections.map(([id, label]) => ({ id, label }))} />
+        <CaseStudyNav sections={sections.filter(([id]) => id !== "results" || cs.results).map(([id, label]) => ({ id, label }))} />
 
         <div className="min-w-0 space-y-20 md:col-span-9 md:col-start-4">
           <Block id="problem" n="01" title="The problem" paras={cs.problem} />
@@ -185,17 +186,18 @@ async function ProjectArticle({ params }: { params: PageProps<"/projects/[slug]"
             </div>
           </section>
 
-          <Block id="challenges" n="07" title="Challenges & iteration" list={cs.challenges} />
+          {cs.results && <Block id="results" n="07" title="Measured results" list={cs.results} />}
+          <Block id="challenges" n={cs.results ? "08" : "07"} title="Challenges & iteration" list={cs.challenges} />
 
           <section id="status" className="scroll-mt-28">
-            <BlockHeading n="08" title="Current status" />
+            <BlockHeading n={cs.results ? "09" : "08"} title="Current status" />
             <Reveal className="glass mt-6 rounded-2xl border-l-4 p-5" style={{ borderLeftColor: accent }}>
               <p className="font-display text-2xl font-bold text-white">{statusLabel[p.status]}</p>
               <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/65">{p.statusNote}</p>
             </Reveal>
           </section>
 
-          <Block id="next" n="09" title="Next steps" list={cs.next} />
+          <Block id="next" n={cs.results ? "10" : "09"} title="Next steps" list={cs.next} />
         </div>
       </div>
 
