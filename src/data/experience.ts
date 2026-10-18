@@ -151,7 +151,7 @@ export const experience: ExperienceItem[] = [
   },
   {
     period: "2024",
-    title: "Bachelor's in Computer Science",
+    title: "B.Tech in Computer Science Engineering",
     org: "Manipal Academy of Higher Education",
     kind: "education",
     summary: "Focused on AI, machine learning, data structures, blockchain and data analytics — applied through research internships, hackathons and startup incubation.",

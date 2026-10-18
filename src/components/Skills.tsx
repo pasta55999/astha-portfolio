@@ -111,7 +111,7 @@ export function Skills() {
               {[
                 { Icon: Code2, v: `${all.length}`, l: "Skills, each with evidence" },
                 { Icon: Layers, v: `${profile.stats[0].value}`, l: "Projects" },
-                { Icon: Zap, v: `${profile.stats[1].value}`, l: "Hackathon builds" },
+                { Icon: Zap, v: `${profile.stats[1].value}`, l: "Hackathons" },
                 { Icon: Heart, v: "Always", l: "Learning" },
               ].map(({ Icon, v, l }, i) => (
                 <span key={l} className={`flex min-w-0 flex-1 items-center gap-3 ${i ? "lg:border-l lg:border-white/10 lg:pl-5" : ""}`}>

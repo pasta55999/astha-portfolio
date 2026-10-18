@@ -7,6 +7,7 @@ import { ArrowRight, Download, MapPin, Mouse } from "lucide-react";
 import { profile } from "@/data/profile";
 import { GithubIcon, LinkedinIcon } from "@/components/BrandIcons";
 import { Starfield } from "@/components/Starfield";
+import { DeveloperScene } from "@/components/DeveloperScene";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -71,7 +72,7 @@ export function Hero() {
 
       <section className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 items-center px-5 pb-28 pt-[130px] sm:px-8 lg:pb-24" aria-labelledby="hero-title">
         <div className="w-full">
-          <div className="grid w-full grid-cols-1 items-center gap-10 lg:grid-cols-[1.15fr_0.85fr]">
+          <div className="grid w-full grid-cols-1 items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
             <div>
               <div className="max-w-2xl">
                 <p className="mb-3 font-mono text-[13px] tracking-[0.35em] text-violet-300/90" aria-label={profile.typed}>
@@ -87,8 +88,8 @@ export function Hero() {
                   }}
                   onPointerLeave={() => setTilt({ x: 0, y: 0 })}
                 >
-                  <motion.h1 {...fade(0.1)} id="hero-title" className="font-display text-gradient-name cursor-default text-[clamp(3.5rem,9vw,6.5rem)] font-extrabold leading-[0.95] tracking-tight">
-                    {profile.firstName}
+                  <motion.h1 {...fade(0.1)} id="hero-title" className="font-display text-gradient-name cursor-default text-[clamp(2.6rem,6.5vw,5rem)] font-extrabold leading-[0.95] tracking-tight">
+                    {profile.name}
                   </motion.h1>
                   <motion.h2 {...fade(0.22)} className="font-display mt-3 text-[clamp(1.6rem,4vw,2.6rem)] font-bold leading-[1.08] tracking-tight text-white">
                     {profile.headline[0]}
@@ -149,12 +150,13 @@ export function Hero() {
               </div>
             </div>
 
-            {/* mindset card */}
-            <motion.div initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1, delay: 0.5, ease }} className="hidden lg:block">
-              <div className="animate-float-slow glass ml-auto max-w-[260px] rounded-2xl border-violet-400/25 p-[1px]">
-                <div className="rounded-2xl bg-[#0a0618]/70 px-5 py-4 shadow-[0_0_40px_rgba(139,92,246,0.25)]">
-                  <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-violet-300/70">{"// mindset"}</p>
-                  <p className="mt-2 text-sm leading-relaxed text-white/80">
+            {/* illustration + cards */}
+            <motion.div initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1, delay: 0.5, ease }} className="relative mx-auto w-full max-w-[560px] lg:mx-0 lg:ml-auto">
+              <DeveloperScene className="aspect-[520/420] w-full" />
+              <div className="animate-float-slow glass absolute -left-2 top-4 hidden rounded-2xl border-violet-400/25 p-[1px] sm:block">
+                <div className="rounded-2xl bg-[#0a0618]/80 px-4 py-3 shadow-[0_0_40px_rgba(139,92,246,0.25)]">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-violet-300/70">{"// mindset"}</p>
+                  <p className="mt-1 text-[13px] text-white/80">
                     {profile.mindset.map((m, i) => (
                       <span key={m}>
                         {m}
@@ -164,15 +166,13 @@ export function Hero() {
                   </p>
                 </div>
               </div>
-
-              {/* terminal card */}
-              <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.8, ease }} className="glass-strong ml-auto mt-6 max-w-[380px] rounded-2xl p-[1px]">
-                <div className="rounded-2xl bg-[#07031a]/80 p-4 font-mono text-[12px] leading-relaxed shadow-[0_0_40px_rgba(139,92,246,0.18)]">
-                  <div className="flex items-center gap-1.5 border-b border-white/10 pb-2.5">
-                    <span className="h-2.5 w-2.5 rounded-full bg-rose-300/70" />
-                    <span className="h-2.5 w-2.5 rounded-full bg-amber-300/70" />
-                    <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/70" />
-                    <span className="ml-2 text-[11px] text-white/40">astha@dubai — zsh</span>
+              <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.9, ease }} className="glass-strong absolute -bottom-6 right-0 hidden w-[300px] rounded-2xl p-[1px] md:block">
+                <div className="rounded-2xl bg-[#07031a]/85 p-3.5 font-mono text-[11px] leading-relaxed shadow-[0_0_40px_rgba(139,92,246,0.18)]">
+                  <div className="flex items-center gap-1.5 border-b border-white/10 pb-2">
+                    <span className="h-2 w-2 rounded-full bg-rose-300/70" />
+                    <span className="h-2 w-2 rounded-full bg-amber-300/70" />
+                    <span className="h-2 w-2 rounded-full bg-emerald-400/70" />
+                    <span className="ml-2 text-[10px] text-white/40">astha@dubai — zsh</span>
                   </div>
                   <TerminalLines />
                 </div>
@@ -198,9 +198,9 @@ export function Hero() {
 
 const terminal = [
   { cmd: "whoami", out: "cs engineer · applied & generative ai · dubai" },
-  { cmd: "ls ~/projects", out: "guidr  trace  reelcall  wish  tell  brandorbit  eval-loop" },
-  { cmd: "cat awards.txt", out: "guidr — winner, devin hackathon · trace — red bull basement finalist" },
-  { cmd: "status --now", out: "open to conversations" },
+  { cmd: "ls ~/projects", out: "guidr  trace  reelcall  wish  tell  brandorbit" },
+  { cmd: "hackathons --count", out: "20+ and counting" },
+  { cmd: "status --now", out: "open to opportunities" },
 ];
 
 /** Lines appear one after another on mount (instant under reduced motion). */

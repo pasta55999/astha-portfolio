@@ -24,16 +24,16 @@ export function Experience() {
                 Startups, hackathons, <GradientText>and what I shipped.</GradientText>
               </Heading>
               <p className="mt-6 max-w-md text-base leading-relaxed text-white/60 sm:text-lg">
-                Only verified items are listed. Team builds are labelled, and my individual contribution is spelled out in each project&apos;s case study.
+                Roles, education, and a selection of the 20+ hackathons and incubator programmes I&apos;ve built in. Team builds are labelled, and my individual contribution is spelled out in each project&apos;s case study.
               </p>
               <div className="mt-8 grid gap-3 sm:grid-cols-2">
                 <div className="glass rounded-2xl p-4">
-                  <p className="font-display text-2xl font-bold text-white">{profile.stats[3].value}</p>
-                  <p className="text-xs text-white/50">{profile.stats[3].label}</p>
+                  <p className="font-display text-2xl font-bold text-white">{profile.stats[1].value}</p>
+                  <p className="text-xs text-white/50">{profile.stats[1].label}</p>
                 </div>
                 <div className="glass rounded-2xl p-4">
-                  <p className="font-display text-2xl font-bold text-white">{items.filter((i) => i.kind === "hackathon").length}</p>
-                  <p className="text-xs text-white/50">Hackathons & incubators</p>
+                  <p className="font-display text-2xl font-bold text-white">{profile.stats[2].value}</p>
+                  <p className="text-xs text-white/50">{profile.stats[2].label}</p>
                 </div>
               </div>
               <figure className="mt-8">
