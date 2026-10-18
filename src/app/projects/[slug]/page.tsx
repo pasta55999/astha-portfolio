@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, ArrowUpRight, Globe, Play, BookOpen, Users, Layers, Activity } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Globe, Play, BookOpen, Users, Layers, Activity, Trophy } from "lucide-react";
 import { GithubIcon } from "@/components/BrandIcons";
 import { projects, getProject, accentVar, statusLabel } from "@/data/projects";
 import { ProjectVisual } from "@/components/ProjectVisual";
@@ -66,6 +66,11 @@ async function ProjectArticle({ params }: { params: PageProps<"/projects/[slug]"
               <span className="eyebrow">{`// Project ${p.number}`}</span>
               <StatusPill status={p.status} />
               <span className="font-mono text-xs text-white/50">{p.year}</span>
+              {p.award && (
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-300/30 bg-amber-300/10 px-3 py-1 text-[11px] font-semibold text-amber-300">
+                  <Trophy className="h-3.5 w-3.5" /> {p.award}
+                </span>
+              )}
             </div>
             <h1 className="font-display mt-5 text-[clamp(2.8rem,7vw,5.5rem)] font-extrabold leading-[0.98] tracking-tight text-white">{p.name}</h1>
             <p className="mt-5 max-w-3xl text-xl leading-snug text-white/80 sm:text-2xl">{p.tagline}</p>

@@ -36,6 +36,8 @@ export type Project = {
   year: string;
   featured: boolean;
   team: string;
+  /** Verified award or recognition, shown as a badge. */
+  award?: string;
   summary: string;
   stack: string[];
   links: { repo?: string; demo?: string; video?: string; docs?: string };
@@ -83,8 +85,8 @@ export const projects: Project[] = [
     statusNote:
       "Working local prototype with one complete lesson (creating a supplier invoice in a simulated accounts-payable app). Not deployed; no auth or multi-user support.",
     year: "2026",
-    // TODO: if Guidr was a team submission, credit collaborators here. All commits in the public repo are Astha's.
-    team: "Hackathon build · repository authored by me",
+    team: "Devin Hackathon · repository authored by me",
+    award: "Winner · Devin Hackathon",
     summary:
       "Click the mic, speak in English, Arabic or a mix of both, and Guidr explains the next step, points at the exact control on screen, and waits for you to actually do it. The model can explain and point — but plain deterministic code decides whether a step is complete.",
     stack: ["React 19", "TypeScript", "Vite", "Convex", "Claude via OpenRouter", "Munsit STT/TTS", "Context.dev", "Web Audio API"],
@@ -190,7 +192,8 @@ export const reportAction = mutation({
     statusNote:
       "Hackathon prototype. All data is synthetic and illustrative: the flood layer is a smooth synthetic blob, damage curves are placeholders and the borrowers are fictional. Nothing here is an operational climate prediction or a compliance determination.",
     year: "2026",
-    team: "Hackathon prototype · solo repository",
+    team: "DEWA Clean Tech Hackathon · solo repository",
+    award: "National Finalist (UAE) · Red Bull Basement 2026",
     summary:
       "Connects a lender's financial records to physical assets, flood hazard and building vulnerability; surfaces shared physical exposure across borrowers; and produces a bilingual Arabic/English review brief. Specialist agents improve from human corrections — but only within a governed blast radius.",
     stack: ["Python", "FastAPI", "Next.js (ar/en RTL)", "pytest", "OpenAI-compatible LLM (optional)"],

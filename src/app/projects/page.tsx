@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, Globe } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Globe, Trophy } from "lucide-react";
 import { projects } from "@/data/projects";
 import { ProjectVisual } from "@/components/ProjectVisual";
 import { Reveal, Eyebrow, Heading, GradientText, StatusPill, SectionBackdrop } from "@/components/ui";
@@ -29,6 +29,11 @@ export default function ProjectsPage() {
         <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
           {projects.map((p, i) => (
             <Reveal as="article" key={p.slug} delay={(i % 3) * 70} className="card group relative flex h-full flex-col overflow-hidden rounded-3xl hover:-translate-y-1">
+              {p.award && (
+                <span className="glass absolute left-4 top-4 z-10 inline-flex items-center gap-1.5 rounded-full border-violet-300/40 px-3.5 py-1.5 text-xs font-semibold text-white">
+                  <Trophy className="h-3.5 w-3.5 text-amber-300" /> {p.award}
+                </span>
+              )}
               <Link href={`/projects/${p.slug}`} className="relative block aspect-[16/10] overflow-hidden" aria-label={`${p.name} case study`}>
                 <ProjectVisual visual={p.visual} accent={p.accent} className="h-full w-full transition-transform duration-700 ease-out group-hover:scale-[1.05]" />
                 <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0b0620] via-transparent to-transparent opacity-80" />

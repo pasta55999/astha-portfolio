@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight, ArrowUpRight, Bot, FlaskConical, Globe, LayoutGrid, Mic, BarChart3, Search, Star } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Bot, FlaskConical, Globe, LayoutGrid, Mic, BarChart3, Search, Star, Trophy } from "lucide-react";
 import { projects, experiments, type Project } from "@/data/projects";
 import { ProjectVisual } from "@/components/ProjectVisual";
 import { Reveal, Eyebrow, Heading, GradientText, StatusPill, SectionBackdrop } from "@/components/ui";
@@ -76,9 +76,10 @@ function ProjectCard({ project: p, featured }: { project: Project; featured?: bo
   const href = `/projects/${p.slug}`;
   return (
     <article className={`card group relative flex h-full flex-col overflow-hidden rounded-3xl hover:-translate-y-1 ${featured ? "card-featured" : ""}`}>
-      {featured && (
+      {(p.award || featured) && (
         <span className="glass absolute left-4 top-4 z-10 inline-flex items-center gap-1.5 rounded-full border-violet-300/40 px-3.5 py-1.5 text-xs font-semibold text-white">
-          <Star className="h-3.5 w-3.5 fill-amber-300 text-amber-300" /> Featured
+          {p.award ? <Trophy className="h-3.5 w-3.5 text-amber-300" /> : <Star className="h-3.5 w-3.5 fill-amber-300 text-amber-300" />}
+          {p.award ?? "Featured"}
         </span>
       )}
       <Link href={href} className="relative block aspect-[16/10] overflow-hidden" aria-label={`${p.name} case study`}>

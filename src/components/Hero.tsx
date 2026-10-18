@@ -197,9 +197,9 @@ export function Hero() {
 }
 
 const terminal = [
-  { cmd: "whoami", out: "genai engineer · dubai · ~2y startups" },
+  { cmd: "whoami", out: "cs engineer · applied & generative ai · dubai" },
   { cmd: "ls ~/projects", out: "guidr  trace  reelcall  wish  tell  brandorbit  eval-loop" },
-  { cmd: "cat focus.txt", out: "agents that can't lie about state · voice-first UX · eval loops" },
+  { cmd: "cat awards.txt", out: "guidr — winner, devin hackathon · trace — red bull basement finalist" },
   { cmd: "status --now", out: "open to conversations" },
 ];
 

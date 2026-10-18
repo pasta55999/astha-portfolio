@@ -22,25 +22,25 @@ export const profile = {
   siteUrl: "https://astha.dev", // TODO: replace with the deployed URL
   github: { handle: "pasta55999", url: "https://github.com/pasta55999" },
   /** TODO: supply real values. Empty strings are hidden in the UI. */
-  email: "",
+  email: "asthachauhan81@gmail.com",
   linkedin: "",
   twitter: "",
   /** Put a file at /public/resume.pdf and set this to "/resume.pdf". */
-  resume: "",
+  resume: "/resume.pdf",
   /** Put a portrait at /public/portrait.jpg and set this to "/portrait.jpg". */
   portrait: "",
 
   about: {
     heading: ["More than", "just an", "engineer."],
     paragraphs: [
-      "I'm a Computer Science Engineer working in Generative AI, with about two years of startup experience and a particular interest in what happens when new technology meets a real-world problem.",
+      "I'm a Computer Science Engineer (Manipal, 2024) working in applied and generative AI, with about two years across Dubai startups — ML engineer, GenAI engineer, and now data and backend work — and a particular interest in what happens when new technology meets a real-world problem.",
       "Working in startups made me curious about more than the engineering: why a product needs to exist, who it's for, how it should behave, and what it takes to get it into people's hands. I grew up in Dubai, and most of what I build starts with a specific person here — a finance assistant learning a new tool, an investor reading a seller's numbers.",
       "Outside of work you'll find me at hackathons, exploring new technologies, building prototypes, or meeting people in the startup ecosystem.",
     ],
     facts: [
-      { icon: "cpu", title: "Generative AI Engineer", sub: "~2 years in a startup environment" },
+      { icon: "cpu", title: "Applied AI Engineer", sub: "GenAI · ML · data at Dubai startups" },
       { icon: "map", title: "Dubai, UAE", sub: "Based in · grew up here" },
-      { icon: "graduation", title: "Computer Science Engineer", sub: "Engineering degree · GenAI focus" }, // TODO: add university name to `sub` once confirmed
+      { icon: "graduation", title: "B.Sc. Computer Science", sub: "Manipal Academy of Higher Education · 2024" }
     ],
     quote: "Curious by nature. Built to make things happen.",
     enjoy: [
@@ -55,10 +55,10 @@ export const profile = {
 
   /** Verified counts — update as the data files change. */
   stats: [
-    { value: "7", label: "Projects built" },
-    { value: "3", label: "Hackathon builds" },
-    { value: "~2 yrs", label: "GenAI in startups" },
-    { value: "Always", label: "Curious" },
+    { value: "7", label: "Open-source builds" },
+    { value: "7", label: "Hackathons & incubators" },
+    { value: "1", label: "Hackathon win (Guidr)" },
+    { value: "~2 yrs", label: "AI in startups" },
   ],
 
   exploring: [

@@ -28,12 +28,12 @@ export function Experience() {
               </p>
               <div className="mt-8 grid gap-3 sm:grid-cols-2">
                 <div className="glass rounded-2xl p-4">
-                  <p className="font-display text-2xl font-bold text-white">{profile.stats[2].value}</p>
-                  <p className="text-xs text-white/50">{profile.stats[2].label}</p>
+                  <p className="font-display text-2xl font-bold text-white">{profile.stats[3].value}</p>
+                  <p className="text-xs text-white/50">{profile.stats[3].label}</p>
                 </div>
                 <div className="glass rounded-2xl p-4">
                   <p className="font-display text-2xl font-bold text-white">{items.filter((i) => i.kind === "hackathon").length}</p>
-                  <p className="text-xs text-white/50">Hackathon builds shipped</p>
+                  <p className="text-xs text-white/50">Hackathons & incubators</p>
                 </div>
               </div>
               <figure className="mt-8">
@@ -56,6 +56,11 @@ export function Experience() {
                         </span>
                         <span className="font-mono text-xs text-white/50">{e.period}</span>
                       </div>
+                      {e.award && (
+                        <span className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-amber-300/30 bg-amber-300/10 px-3 py-1 text-[11px] font-semibold text-amber-300">
+                          <Trophy className="h-3.5 w-3.5" /> {e.award}
+                        </span>
+                      )}
                       <h3 className="font-display mt-4 text-xl font-bold tracking-tight text-white">{e.title}</h3>
                       <p className="mt-1 text-sm text-violet-300/90">{e.org}</p>
                       <p className="mt-3 text-sm leading-relaxed text-white/60">{e.summary}</p>
