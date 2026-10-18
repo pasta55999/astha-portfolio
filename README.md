@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Astha Chauhan — portfolio
 
-## Getting Started
-
-First, run the development server:
+Personal portfolio for Astha Chauhan, Generative AI Engineer, Dubai. Next.js 16 (App Router, cache components), TypeScript, Tailwind v4, Framer Motion, Lucide.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm run lint
+npm run build && npm run start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Where the content lives
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Everything visible is driven by data files — no copy is hard-coded in components.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| File | What it controls |
+|---|---|
+| `src/data/profile.ts` | Name, headline, intro, about copy, "things I'm exploring", links (email / LinkedIn / resume / portrait), current-focus indicator |
+| `src/data/projects.ts` | Every project: card copy, status, stack, links, full case study, and the "Inside My Thinking" stages. Add an entry and it appears in the showcase, the explorer, `/projects` and gets its own `/projects/[slug]` page |
+| `src/data/experience.ts` | Timeline. Items render only when `verified: true` |
+| `src/data/skills.ts` | Skill groups; each skill links to the project slug that demonstrates it |
 
-## Learn More
+### Things still to fill in (search for `TODO`)
 
-To learn more about Next.js, take a look at the following resources:
+- `profile.email`, `profile.linkedin`, `profile.twitter` — hidden until set
+- `profile.resume` — drop a PDF in `public/` and set the path
+- `profile.portrait` — drop an image in `public/` and set the path (a monogram card is shown otherwise)
+- `profile.siteUrl` — used for Open Graph metadata
+- `experience.ts` — company name, dates, university; the Guidr entry's event name / award once verified
+- `projects.ts` — Guidr collaborators if it was a team entry; a public repo URL for the support-agent eval project
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+src/app                 routes: /, /projects, /projects/[slug], not-found, icon, OG image
+src/components          Hero + SystemCanvas, ProjectShowcase, ProjectVisual (per-project UI mockups),
+                        ThinkingExplorer (signature feature), About, Experience (+Skills), Contact, Nav, Footer
+src/data                all content
+```
 
-## Deploy on Vercel
+Design tokens are CSS variables in `src/app/globals.css` (ink / paper / lime / coral / cobalt / amber). Display type is Instrument Serif; body is Geist; mono is Geist Mono.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Reduced motion is honoured globally via `MotionConfig` and a CSS fallback; the hero canvas renders a static frame under reduced motion.

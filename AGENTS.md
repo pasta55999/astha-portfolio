@@ -7,3 +7,11 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## Project notes
+
+- Dev: `npm run dev`. Verify: `npm run lint && npx tsc --noEmit && npm run build`.
+- All content is in `src/data/*.ts`; components should not hard-code copy. Never invent metrics, awards or links — leave a `TODO` and hide the item instead.
+- Next 16 cache components: avoid `new Date()`/`Math.random()` in server components; `params` must be awaited inside a `<Suspense>` boundary (see `src/app/projects/[slug]/page.tsx`).
+- `lucide-react` v1 has no brand icons; GitHub/LinkedIn live in `src/components/BrandIcons.tsx`.
+- Reduced motion: `MotionConfig reducedMotion="user"` in `src/components/Providers.tsx` — don't gate `initial` props on `useReducedMotion()` (causes hydration mismatches).
