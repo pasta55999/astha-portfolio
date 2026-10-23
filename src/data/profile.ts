@@ -23,6 +23,12 @@ export const profile = {
   github: { handle: "pasta55999", url: "https://github.com/pasta55999" },
   /** TODO: supply real values. Empty strings are hidden in the UI. */
   email: "asthachauhan81@gmail.com",
+  /**
+   * Web3Forms access key for the contact form (free at web3forms.com — enter
+   * your email there and they send you a key). It's public by design: it can
+   * only send mail TO you. Empty = the form shows a "not configured" error.
+   */
+  contactAccessKey: "8c747969-9ed4-4712-a632-3b362bb9397f",
   linkedin: "https://www.linkedin.com/in/astha-chauhan-7a75211b7/",
   twitter: "",
   /** Put a file at /public/resume.pdf and set this to "/resume.pdf". */

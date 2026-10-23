@@ -82,32 +82,50 @@ export function Contact() {
 }
 
 /**
- * No backend: the form composes a mailto: link to profile.email. If no email
- * is configured yet, the message is copied to the clipboard and the visitor
- * is pointed to GitHub — the button never silently does nothing.
+ * The form POSTs to Web3Forms (profile.contactAccessKey), which emails the
+ * submission to Astha's inbox — visitors never leave the page. If no key is
+ * configured yet, submit shows an inline error instead of falling back to mailto.
  */
 function ContactForm() {
-  const [state, setState] = useState<"idle" | "copied" | "sent">("idle");
+  const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [error, setError] = useState("");
   const field = "mt-2 h-10 w-full rounded-lg border border-white/10 bg-black/40 px-3 text-[14px] text-white placeholder:text-white/35 outline-none transition focus:border-violet-400/60";
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const name = String(fd.get("name") || "");
-    const email = String(fd.get("email") || "");
-    const subject = String(fd.get("subject") || "");
-    const message = String(fd.get("message") || "");
-    const body = `Hi Astha,\n\n${message}\n\n— ${name}${email ? ` (${email})` : ""}`;
-    if (profile.email) {
-      window.location.href = `mailto:${profile.email}?subject=${encodeURIComponent(`[Portfolio] ${subject}`)}&body=${encodeURIComponent(body)}`;
-      setState("sent");
-    } else {
-      try {
-        await navigator.clipboard.writeText(`${subject}\n\n${body}`);
-        setState("copied");
-      } catch {
-        setState("copied");
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+    if (!profile.contactAccessKey) {
+      setError("This form isn't wired up yet — reach me on GitHub or LinkedIn below.");
+      setState("error");
+      return;
+    }
+    setState("sending");
+    setError("");
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: profile.contactAccessKey,
+          from_name: "Portfolio Contact Form",
+          subject: `[Portfolio] ${String(fd.get("subject") || "New message")}`,
+          name: String(fd.get("name") || ""),
+          email: String(fd.get("email") || ""),
+          replyto: String(fd.get("email") || ""),
+          message: String(fd.get("message") || ""),
+          botcheck: Boolean(fd.get("botcheck")),
+        }),
+      });
+      const data = (await res.json().catch(() => null)) as { success?: boolean; message?: string } | null;
+      if (!res.ok || !data?.success) {
+        throw new Error(data?.message || "Couldn't send — please try again in a moment.");
       }
+      form.reset();
+      setState("sent");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Couldn't send — please try again in a moment.");
+      setState("error");
     }
   };
 
@@ -123,7 +141,7 @@ function ContactForm() {
         I&apos;m all <GradientText>ears!</GradientText>
       </h3>
       <p className="mt-3 text-[14px] leading-relaxed text-white/60">
-        {profile.email ? "Fill out the form and it will open in your mail app, addressed to me." : "Fill out the form — it copies your message so you can paste it wherever you reach me (GitHub for now; email coming soon)."}
+        Fill out the form and it lands straight in my inbox — no mail app needed.
       </p>
       <div className="mt-6 space-y-4">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -158,22 +176,33 @@ function ContactForm() {
           </label>
           <textarea id="cf-message" name="message" required rows={4} placeholder="Tell me about the problem you're working on…" className={`${field} h-auto py-2`} />
         </div>
+        {/* Honeypot — invisible to visitors; Web3Forms blocks submissions where it's checked. */}
+        <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+          <label htmlFor="cf-botcheck">Leave this unchecked</label>
+          <input id="cf-botcheck" name="botcheck" type="checkbox" tabIndex={-1} autoComplete="off" />
+        </div>
       </div>
-      <button type="submit" className="btn-primary-glow mt-5 flex h-11 w-full items-center justify-center gap-2.5 rounded-lg bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 text-[15px] font-semibold text-white transition-transform hover:-translate-y-0.5">
-        {state === "idle" ? (
-          <>
-            <Send className="h-4 w-4" /> {profile.email ? "Send Message" : "Copy Message"}
-          </>
+      <button
+        type="submit"
+        disabled={state === "sending" || state === "sent"}
+        className="btn-primary-glow mt-5 flex h-11 w-full items-center justify-center gap-2.5 rounded-lg bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 text-[15px] font-semibold text-white transition-transform hover:-translate-y-0.5 disabled:cursor-default disabled:opacity-80 disabled:hover:translate-y-0"
+      >
+        {state === "sending" ? (
+          "Sending…"
         ) : state === "sent" ? (
           <>
-            <Check className="h-4 w-4" /> Opening your mail app…
+            <Check className="h-4 w-4" /> Message sent
           </>
         ) : (
           <>
-            <Check className="h-4 w-4" /> Copied — paste it to me on GitHub
+            <Send className="h-4 w-4" /> Send Message
           </>
         )}
       </button>
+      {state === "sent" && (
+        <p className="mt-3 text-[13px] text-emerald-300">Thanks — I&apos;ll get back to you soon.</p>
+      )}
+      {state === "error" && <p className="mt-3 text-[13px] text-rose-300">{error}</p>}
     </form>
   );
 }
